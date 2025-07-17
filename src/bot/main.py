@@ -40,6 +40,10 @@ async def main():
     storage = MemoryStorage()
     dp = Dispatcher(storage=storage)
     
+    # Сбрасываем webhook при старте (на случай если он был установлен)
+    await bot.delete_webhook(drop_pending_updates=True)
+    logger.info("Webhook deleted, starting polling mode")
+    
     # Регистрация middleware
     dp.message.middleware(RateLimitMiddleware())
     dp.callback_query.middleware(RateLimitMiddleware())

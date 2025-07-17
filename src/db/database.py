@@ -8,7 +8,7 @@ from src.config.settings import settings
 # Создаем асинхронный движок
 engine = create_async_engine(
     settings.database_url_async,
-    echo=settings.debug,
+    echo=False,  # Отключаем SQL логи для продакшена
     pool_size=10,
     max_overflow=20,
     pool_pre_ping=True,
