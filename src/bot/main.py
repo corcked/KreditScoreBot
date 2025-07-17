@@ -52,12 +52,14 @@ async def main():
     dp.include_router(bank_flow.router)
     
     # Установка команд бота
+    from aiogram.types import BotCommand
+    
     await bot.set_my_commands([
-        ("start", "Начать работу с ботом"),
-        ("menu", "Главное меню"),
-        ("my_app", "Моя заявка"),
-        ("invite", "Реферальная программа"),
-        ("help", "Помощь"),
+        BotCommand(command="start", description="Начать работу с ботом"),
+        BotCommand(command="menu", description="Главное меню"),
+        BotCommand(command="my_app", description="Моя заявка"),
+        BotCommand(command="invite", description="Реферальная программа"),
+        BotCommand(command="help", description="Помощь"),
     ])
     
     # Регистрация хуков

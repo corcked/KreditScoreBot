@@ -4,7 +4,12 @@
       "Bash(mkdir:*)",
       "Bash(touch:*)",
       "Bash(cd:*)",
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "Bash(git commit -m \"Initial commit: KreditScore Bot - Telegram bot for credit scoring and loan applications\n\nFeatures:\n- PDN (debt burden indicator) calculation\n- Personal data scoring system\n- Loan applications (car loans and microloans)\n- Referral system with bonuses\n- Bank submission simulation\n- Russian/Uzbek language support\n- FastAPI REST endpoints\n- PostgreSQL database\n- Docker Compose setup\n- Railway deployment ready\n- GitHub Actions CI/CD\n- Comprehensive unit tests\")",
+      "Bash(cd:*)",
+      "Bash(git push origin main)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }
