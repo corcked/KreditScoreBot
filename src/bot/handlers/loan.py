@@ -238,6 +238,9 @@ async def show_loan_confirmation(message: types.Message, state: FSMContext):
         pdn_value=pdn_value
     )
     
+    # Получаем обновленные данные после сохранения
+    data = await state.get_data()
+    
     # Получаем статус ПДН
     pdn_status = PDNCalculator.get_pdn_status(pdn_value)
     pdn_emoji = PDNCalculator.get_pdn_emoji(pdn_status)
