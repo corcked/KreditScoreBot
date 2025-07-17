@@ -54,9 +54,8 @@ async def init_db() -> None:
     from src.db.models import Base
     
     async with engine.begin() as conn:
-        # В продакшене используем миграции Alembic
-        # await conn.run_sync(Base.metadata.create_all)
-        pass
+        # Создаем таблицы если их нет
+        await conn.run_sync(Base.metadata.create_all)
 
 
 async def close_db() -> None:
