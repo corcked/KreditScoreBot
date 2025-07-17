@@ -21,6 +21,7 @@ aiohttp==3.9.1
 pytz==2023.3.post1
 babel==2.13.1
 cryptography==41.0.7
+cachetools==5.3.2
 
 # Monitoring
 prometheus-client==0.19.0
