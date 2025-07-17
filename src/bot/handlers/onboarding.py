@@ -98,6 +98,10 @@ async def process_phone(message: types.Message, state: FSMContext):
             language_code=message.from_user.language_code or "ru"
         )
         
+        # Сначала добавляем и сохраняем пользователя
+        db.add(user)
+        await db.flush()  # Flush чтобы получить user.id
+        
         # Обрабатываем реферальную регистрацию
         if referral_code and ReferralSystem.validate_referral_code(referral_code):
             # Находим реферера по коду
@@ -107,9 +111,10 @@ async def process_phone(message: types.Message, state: FSMContext):
             referrer = result.scalar_one_or_none()
             
             if referrer and referrer.telegram_id != message.from_user.id:
-                # Создаем запись о реферальной регистрации
+                # Обновляем связь с реферером
                 user.referred_by_id = referrer.id
                 
+                # Создаем запись о реферальной регистрации
                 registration = ReferralRegistration(
                     referrer_id=referrer.id,
                     referred_user_id=user.id,
@@ -120,13 +125,12 @@ async def process_phone(message: types.Message, state: FSMContext):
                 # Увеличиваем счетчик рефералов
                 referrer.referral_count += 1
         
-        # Создаем пустую запись персональных данных
+        # Теперь создаем персональные данные с правильным user_id
         personal_data = PersonalData(
             user_id=user.id,
             device_type=detect_device_type(message.from_user)
         )
         
-        db.add(user)
         db.add(personal_data)
         await db.commit()
     
