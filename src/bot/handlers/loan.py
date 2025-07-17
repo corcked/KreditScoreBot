@@ -189,7 +189,7 @@ async def process_income(message: types.Message, state: FSMContext, _: callable)
     
     await message.answer(
         f"{_('Do you have monthly payments for other loans?')}\n"
-        f"{_('If yes, enter total amount. If no, click \'Skip\'.')}",
+        f"{_('If yes, enter total amount. If no, click \\'Skip\\'.')}",
         reply_markup=Keyboards.skip_other_payments(_)
     )
     await state.set_state(LoanApplicationStates.entering_other_payments)
@@ -252,7 +252,7 @@ async def show_loan_confirmation(message: types.Message, state: FSMContext, _: c
     summary += f"\n{pdn_emoji} **{_('DTI')}: {pdn_value}%**\n"
     
     if not PDNCalculator.can_get_loan(pdn_value):
-        summary += f"\n⚠️ **{_('Attention! With DTI > 50% banks won\'t issue a loan.')}**"
+        summary += f"\n⚠️ **{_('Attention! With DTI > 50% banks won\\'t issue a loan.')}**"
     
     await message.answer(
         f"{_('Check application data')}:\n\n{summary}\n\n{_('All correct?')}",
@@ -325,7 +325,7 @@ async def confirm_application(callback: types.CallbackQuery, state: FSMContext, 
     await callback.message.edit_text(
         f"✅ {_('Application created successfully!')}\n\n"
         f"{pdn_description}\n\n"
-        f"{_('What\'s next?')}",
+        f"{_('What\\'s next?')}",
         reply_markup=Keyboards.application_actions(_, can_send=can_send),
         parse_mode="Markdown"
     )

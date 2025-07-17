@@ -48,7 +48,7 @@ async def start_send_to_bank(callback: types.CallbackQuery, state: FSMContext, _
         # Проверяем ПДН
         if application.pdn_value > 50:
             await callback.answer(
-                "При ПДН > 50% банки не смогут выдать кредит",
+                _("With DTI > 50% banks won't approve loan"),
                 show_alert=True
             )
             return
@@ -56,17 +56,17 @@ async def start_send_to_bank(callback: types.CallbackQuery, state: FSMContext, _
         await state.update_data(application_id=application.id)
         
         confirm_text = (
-            "🏦 **Отправка заявки в банки**\n\n"
-            "Ваша заявка будет отправлена во все банки-партнеры.\n"
-            "Банки рассмотрят заявку и отправят предложения.\n\n"
-            "⏱ Примерное время ожидания: 10 минут\n\n"
-            "Отправить заявку?"
+            f"🏦 **{_('Send application to banks')}**\n\n"
+            f"{_('Your application will be sent to all partner banks.')}\n"
+            f"{_('Banks will review application and send offers.')}\n\n"
+            f"⏱ {_('Estimated wait time: 10 minutes')}\n\n"
+            f"{_('Send application?')}"
         )
         
         keyboard = [
             [
-                types.InlineKeyboardButton(text="✅ Отправить", callback_data="confirm_send"),
-                types.InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_send"),
+                types.InlineKeyboardButton(text=f"✅ {_('Send')}", callback_data="confirm_send"),
+                types.InlineKeyboardButton(text=f"❌ {_('Cancel')}", callback_data="cancel_send"),
             ]
         ]
         
@@ -82,13 +82,13 @@ async def start_send_to_bank(callback: types.CallbackQuery, state: FSMContext, _
 
 
 @router.callback_query(BankFlowStates.confirming_send, F.data == "confirm_send")
-async def confirm_send_to_bank(callback: types.CallbackQuery, state: FSMContext):
+async def confirm_send_to_bank(callback: types.CallbackQuery, state: FSMContext, _: callable):
     """Подтверждение отправки в банк"""
     data = await state.get_data()
     application_id = data.get("application_id")
     
     if not application_id:
-        await callback.answer("Ошибка: заявка не найдена", show_alert=True)
+        await callback.answer(_('Error: application not found'), show_alert=True)
         return
     
     async with get_db_context() as db:
@@ -99,7 +99,7 @@ async def confirm_send_to_bank(callback: types.CallbackQuery, state: FSMContext)
         application = result.scalar_one_or_none()
         
         if not application:
-            await callback.answer("Ошибка: заявка не найдена", show_alert=True)
+            await callback.answer(_('Error: application not found'), show_alert=True)
             return
         
         application.status = LoanStatus.SENT
@@ -108,27 +108,27 @@ async def confirm_send_to_bank(callback: types.CallbackQuery, state: FSMContext)
     
     # Отправляем уведомление
     await callback.message.edit_text(
-        "✅ **Заявка успешно отправлена!**\n\n"
-        "Ваша заявка отправлена во все банки-партнеры.\n"
-        "Мы уведомим вас, как только получим ответы.\n\n"
-        "📱 Ожидайте SMS с предложениями от банков.",
-        reply_markup=Keyboards.main_menu(),
+        f"✅ **{_('Application sent successfully!')}**\n\n"
+        f"{_('Your application sent to all partner banks.')}\n"
+        f"{_('We will notify you when we receive responses.')}\n\n"
+        f"📱 {_('Wait for SMS with offers from banks.')}",
+        reply_markup=Keyboards.main_menu(_),
         parse_mode="Markdown"
     )
     
     await state.clear()
-    await callback.answer("Заявка отправлена!")
+    await callback.answer(_('Application sent!'))
     
     # Запускаем симуляцию ответа банка
     asyncio.create_task(simulate_bank_response(callback.bot, callback.from_user.id, application_id))
 
 
 @router.callback_query(BankFlowStates.confirming_send, F.data == "cancel_send")
-async def cancel_send_to_bank(callback: types.CallbackQuery, state: FSMContext):
+async def cancel_send_to_bank(callback: types.CallbackQuery, state: FSMContext, _: callable):
     """Отмена отправки в банк"""
     await callback.message.edit_text(
-        "Отправка заявки отменена.",
-        reply_markup=Keyboards.main_menu()
+        _('Send canceled.'),
+        reply_markup=Keyboards.main_menu(_)
     )
     await state.clear()
     await callback.answer()
@@ -140,6 +140,17 @@ async def simulate_bank_response(bot, user_telegram_id: int, application_id: int
     await asyncio.sleep(settings.bank_response_delay_minutes * 60)
     
     async with get_db_context() as db:
+        # Получаем язык пользователя
+        from src.bot.utils.i18n import simple_gettext
+        result = await db.execute(
+            select(User).where(User.telegram_id == user_telegram_id)
+        )
+        user = result.scalar_one_or_none()
+        if not user:
+            return
+        
+        lang_code = user.language_code or 'ru'
+        _ = lambda msg: simple_gettext(lang_code, msg)
         # Получаем заявку
         result = await db.execute(
             select(LoanApplication).where(LoanApplication.id == application_id)
@@ -155,10 +166,10 @@ async def simulate_bank_response(bot, user_telegram_id: int, application_id: int
         if is_approved:
             # Генерируем "предложения" от банков
             banks = [
-                ("Капиталбанк", application.annual_rate - 2),
-                ("Узпромстройбанк", application.annual_rate - 1),
-                ("Ипотека-банк", application.annual_rate),
-                ("Хамкорбанк", application.annual_rate + 1),
+                (_("Kapitalbank"), application.annual_rate - 2),
+                (_("Uzpromstroybank"), application.annual_rate - 1),
+                (_("Ipoteka-bank"), application.annual_rate),
+                (_("Hamkorbank"), application.annual_rate + 1),
             ]
             
             # Фильтруем банки с валидными ставками
@@ -172,35 +183,35 @@ async def simulate_bank_response(bot, user_telegram_id: int, application_id: int
                         valid_banks.append((bank_name, rate))
             
             if valid_banks:
-                response_text = "📱 **SMS от банков получена!**\n\n"
-                response_text += "Поступили предложения:\n\n"
+                response_text = f"📱 **{_('SMS from banks received!')}**\n\n"
+                response_text += f"{_('Offers received:')}\n\n"
                 
                 for bank_name, rate in valid_banks[:3]:  # Показываем до 3 банков
                     response_text += f"🏦 **{bank_name}**\n"
-                    response_text += f"   Ставка: {rate}%\n"
-                    response_text += f"   Статус: ✅ Предварительно одобрено\n\n"
+                    response_text += f"   {_('Rate')}: {rate}%\n"
+                    response_text += f"   {_('Status: Pre-approved')}\n\n"
                 
-                response_text += "Для оформления кредита обратитесь в выбранный банк."
+                response_text += _('Contact selected bank to complete loan.')
                 
-                bank_response = f"Одобрено {len(valid_banks)} банками"
+                bank_response = _('Approved by {count} banks').format(count=len(valid_banks))
             else:
                 response_text = (
-                    "📱 **Ответ от банков получен**\n\n"
-                    "К сожалению, ваша заявка не была одобрена.\n"
-                    "Рекомендуем улучшить кредитную историю и попробовать позже."
+                    f"📱 **{_('Response from banks received')}**\n\n"
+                    f"{_('Unfortunately, your application was not approved.')}\n"
+                    f"{_('Recommend improving credit history and try later.')}"
                 )
-                bank_response = "Отклонено"
+                bank_response = _('Declined')
         else:
             response_text = (
-                "📱 **Ответ от банков получен**\n\n"
-                "К сожалению, ваша заявка не была одобрена.\n"
-                "Возможные причины:\n"
-                "• Недостаточный доход\n"
-                "• Отсутствие кредитной истории\n"
-                "• Высокая долговая нагрузка\n\n"
-                "Попробуйте подать заявку через 3 месяца."
+                f"📱 **{_('Response from banks received')}**\n\n"
+                f"{_('Unfortunately, your application was not approved.')}\n"
+                f"{_('Possible reasons:')}\n"
+                f"• {_('Insufficient income')}\n"
+                f"• {_('No credit history')}\n"
+                f"• {_('High debt burden')}\n\n"
+                f"{_('Try applying in 3 months.')}"
             )
-            bank_response = "Отклонено"
+            bank_response = _('Declined')
         
         # Обновляем заявку
         application.bank_response_at = datetime.utcnow()
@@ -220,7 +231,7 @@ async def simulate_bank_response(bot, user_telegram_id: int, application_id: int
 
 
 @router.message(F.text == "/my_app")
-async def show_my_application_command(message: types.Message):
+async def show_my_application_command(message: types.Message, _: callable):
     """Команда для показа текущей заявки"""
     async with get_db_context() as db:
         # Получаем пользователя
@@ -231,7 +242,7 @@ async def show_my_application_command(message: types.Message):
         
         if not user:
             await message.answer(
-                "Вы еще не зарегистрированы. Используйте /start для начала."
+                _('You are not registered. Use /start to begin.')
             )
             return
         
@@ -246,9 +257,9 @@ async def show_my_application_command(message: types.Message):
         
         if not application:
             await message.answer(
-                "У вас нет активных заявок.\n\n"
-                "Создайте новую заявку для расчета долговой нагрузки.",
-                reply_markup=Keyboards.main_menu()
+                f"{_('You have no active applications.')}\n\n"
+                f"{_('Create new application for debt burden calculation.')}",
+                reply_markup=Keyboards.main_menu(_)
             )
             return
         
@@ -256,30 +267,30 @@ async def show_my_application_command(message: types.Message):
         from src.bot.utils import format_amount
         from src.core.pdn import PDNCalculator
         
-        loan_type = "Автокредит" if application.loan_type.value == "carloan" else "Микрозайм"
+        loan_type = _('Car loan') if application.loan_type.value == "carloan" else _('Microloan')
         
         status_text = {
-            LoanStatus.NEW: "🆕 Новая",
-            LoanStatus.SENT: "📤 Отправлена в банк",
-            LoanStatus.ARCHIVED: "📁 В архиве"
+            LoanStatus.NEW: f"🆕 {_('New')}",
+            LoanStatus.SENT: f"📤 {_('Sent to bank')}",
+            LoanStatus.ARCHIVED: f"📁 {_('Archived')}"
         }[application.status]
         
         pdn_status = PDNCalculator.get_pdn_status(application.pdn_value)
         pdn_emoji = PDNCalculator.get_pdn_emoji(pdn_status)
         
-        text = f"**Ваша текущая заявка**\n\n"
-        text += f"📅 Дата: {application.created_at.strftime('%d.%m.%Y %H:%M')}\n"
-        text += f"📊 Статус: {status_text}\n"
+        text = f"**{_('Your current application')}**\n\n"
+        text += f"📅 {_('Date')}: {application.created_at.strftime('%d.%m.%Y %H:%M')}\n"
+        text += f"📊 {_('Status')}: {status_text}\n"
         
         if application.status == LoanStatus.SENT and application.bank_response:
-            text += f"🏦 Ответ банков: {application.bank_response}\n"
+            text += f"🏦 {_('Banks response')}: {application.bank_response}\n"
         
         text += f"\n**{loan_type}**\n"
-        text += f"💰 Сумма: {format_amount(application.amount)} сум\n"
-        text += f"📊 Ставка: {application.annual_rate}%\n"
-        text += f"📅 Срок: {application.term_months} мес.\n"
-        text += f"💳 Платеж: {format_amount(application.monthly_payment)} сум\n"
-        text += f"{pdn_emoji} ПДН: {application.pdn_value}%"
+        text += f"💰 {_('Amount')}: {format_amount(application.amount)} {_('sum')}\n"
+        text += f"📊 {_('Rate')}: {application.annual_rate}%\n"
+        text += f"📅 {_('Term')}: {application.term_months} {_('months')}\n"
+        text += f"💳 {_('Monthly payment')}: {format_amount(application.monthly_payment)} {_('sum')}\n"
+        text += f"{pdn_emoji} {_('DTI')}: {application.pdn_value}%"
         
         can_send = (
             application.status == LoanStatus.NEW and
@@ -288,6 +299,6 @@ async def show_my_application_command(message: types.Message):
         
         await message.answer(
             text,
-            reply_markup=Keyboards.application_actions(can_send=can_send),
+            reply_markup=Keyboards.application_actions(_, can_send=can_send),
             parse_mode="Markdown"
         )

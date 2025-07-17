@@ -45,8 +45,8 @@ async def cmd_start(message: types.Message, state: FSMContext, _: callable):
             await state.update_data(referral_code=referral_code)
             
             welcome_text = (
-                f"{_('Welcome! I\'m KreditScore Bot.')} 🎉\n\n"
-                f"{_('I\'ll help you:')}\n"
+                f"{_('Welcome! I\\'m KreditScore Bot.')} 🎉\n\n"
+                f"{_('I\\'ll help you:')}\n"
                 f"• {_('Calculate debt burden indicator')}\n"
                 f"• {_('Get credit score')}\n"
                 f"• {_('Apply for a loan')}\n\n"
@@ -180,7 +180,7 @@ async def process_language(callback: types.CallbackQuery, state: FSMContext, _: 
     # Завершаем онбординг
     await callback.message.edit_text(
         f"✅ {new_translate('Welcome!')}\n\n"
-        f"{new_translate('I\'ll help you:')}\n"
+        f"{new_translate('I\\'ll help you:')}\n"
         f"• {new_translate('Apply for a loan')}\n"
         f"• {new_translate('Calculate debt burden indicator')}\n"
         f"• {new_translate('Get credit score')}\n\n"
