@@ -57,6 +57,7 @@ class Keyboards:
         keyboard = [
             [InlineKeyboardButton(text="💳 Новая заявка", callback_data="new_loan")],
             [InlineKeyboardButton(text="📋 Мои заявки", callback_data="my_applications")],
+            [InlineKeyboardButton(text="📊 Мои показатели", callback_data="my_score")],
             [InlineKeyboardButton(text="👤 Личные данные", callback_data="personal_data")],
             [InlineKeyboardButton(text="🎁 Реферальная программа", callback_data="referral")],
             [InlineKeyboardButton(text="⚙️ Настройки", callback_data="settings")],

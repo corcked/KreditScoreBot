@@ -5,7 +5,7 @@ import sys
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 
-from src.bot.handlers import bank_flow, loan, onboarding, personal_data, referral
+from src.bot.handlers import bank_flow, loan, onboarding, personal_data, referral, score
 from src.bot.middleware.rate_limit import RateLimitMiddleware
 from src.config.settings import settings
 from src.db.database import close_db, init_db
@@ -54,6 +54,7 @@ async def main():
     dp.include_router(personal_data.router)
     dp.include_router(referral.router)
     dp.include_router(bank_flow.router)
+    dp.include_router(score.router)
     
     # Установка команд бота
     from aiogram.types import BotCommand
@@ -62,6 +63,7 @@ async def main():
         BotCommand(command="start", description="Начать работу с ботом"),
         BotCommand(command="menu", description="Главное меню"),
         BotCommand(command="my_app", description="Моя заявка"),
+        BotCommand(command="score", description="Мои показатели"),
         BotCommand(command="invite", description="Реферальная программа"),
         BotCommand(command="help", description="Помощь"),
     ])
