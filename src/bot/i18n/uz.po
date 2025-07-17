@@ -545,3 +545,7 @@ msgstr "Qoniqarli ko'rsatkich. Kreditni tasdiqlash mumkin."
 
 msgid "High debt burden! Banks won't be able to issue a loan."
 msgstr "Yuqori qarz yuki! Banklar kredit bera olmaydi."
+
+# Additional errors
+msgid "Error: data not found"
+msgstr "Xato: ma'lumotlar topilmadi"

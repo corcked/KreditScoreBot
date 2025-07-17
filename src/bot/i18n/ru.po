@@ -545,3 +545,7 @@ msgstr "Приемлемый показатель. Возможно одобре
 
 msgid "High debt burden! Banks won't be able to issue a loan."
 msgstr "Высокая долговая нагрузка! Банки не смогут выдать кредит."
+
+# Additional errors
+msgid "Error: data not found"
+msgstr "Ошибка: данные не найдены"

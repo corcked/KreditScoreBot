@@ -145,57 +145,61 @@ class ReferralSystem:
         return True, ""
 
     @staticmethod
-    def format_referral_message(link: str, count: int = 0) -> str:
+    def format_referral_message(link: str, count: int = 0, translate=None) -> str:
         """
         Форматирование сообщения с реферальной ссылкой
         
         Args:
             link: Реферальная ссылка
             count: Количество приглашенных пользователей
+            translate: Функция перевода
             
         Returns:
             Отформатированное сообщение
         """
-        message = "🎁 **Ваша реферальная программа**\\n\\n"
-        message += f"Приглашайте друзей и получайте +20 баллов к скорингу за каждого!\\n\\n"
-        message += f"📊 Приглашено пользователей: **{count}**\\n\\n"
-        message += f"🔗 Ваша персональная ссылка:\\n`{link}`\\n\\n"
-        message += "Поделитесь этой ссылкой с друзьями. Когда они зарегистрируются "
-        message += "в боте по вашей ссылке, вы автоматически получите бонусные баллы!"
+        _ = translate if translate else lambda x: x
+        message = f"🎁 **{_('Referral Program')}**\\n\\n"
+        message += f"{_('Invite friends and get bonuses!')}\\n\\n"
+        message += f"📊 {_('Invited users')}: **{count}** {_('people')}\\n\\n"
+        message += f"🔗 {_('Your referral link')}:\\n`{link}`\\n\\n"
+        message += _('Share this link with friends. When they register using your link, you will automatically receive bonus points!')
         
         return message
 
     @staticmethod
-    def generate_share_text(link: str) -> str:
+    def generate_share_text(link: str, translate=None) -> str:
         """
         Генерация текста для шаринга
         
         Args:
             link: Реферальная ссылка
+            translate: Функция перевода
             
         Returns:
             Текст для отправки
         """
-        text = "🏦 KreditScore - узнай свой кредитный рейтинг!\\n\\n"
-        text += "✅ Мгновенный расчет долговой нагрузки\\n"
-        text += "✅ Оценка вероятности одобрения кредита\\n"
-        text += "✅ Подбор лучших предложений от банков\\n\\n"
-        text += f"Начни прямо сейчас: {link}"
+        _ = translate if translate else lambda x: x
+        text = f"🏦 KreditScore - {_('discover your credit rating!')}\\n\\n"
+        text += f"✅ {_('Instant debt burden calculation')}\\n"
+        text += f"✅ {_('Credit approval probability assessment')}\\n"
+        text += f"✅ {_('Best offers from banks')}\\n\\n"
+        text += f"{_('Start now')}: {link}"
         
         return text
 
     @staticmethod
-    def create_share_button_url(link: str) -> str:
+    def create_share_button_url(link: str, translate=None) -> str:
         """
         Создание URL для кнопки "Поделиться" в Telegram
         
         Args:
             link: Реферальная ссылка
+            translate: Функция перевода
             
         Returns:
             URL для inline-кнопки
         """
-        share_text = ReferralSystem.generate_share_text(link)
+        share_text = ReferralSystem.generate_share_text(link, translate)
         params = {
             'text': share_text
         }

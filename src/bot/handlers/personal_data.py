@@ -23,7 +23,7 @@ router = Router(name="personal_data")
 
 
 @router.callback_query(F.data.in_(["personal_data", "fill_personal"]))
-async def start_personal_data(callback: types.CallbackQuery, state: FSMContext):
+async def start_personal_data(callback: types.CallbackQuery, state: FSMContext, _: callable):
     """Начало заполнения персональных данных"""
     async with get_db_context() as db:
         # Получаем данные пользователя
@@ -33,7 +33,7 @@ async def start_personal_data(callback: types.CallbackQuery, state: FSMContext):
         user = result.scalar_one_or_none()
         
         if not user:
-            await callback.answer("Ошибка: пользователь не найден", show_alert=True)
+            await callback.answer(_('Error: user not found'), show_alert=True)
             return
         
         # Получаем персональные данные
@@ -43,7 +43,7 @@ async def start_personal_data(callback: types.CallbackQuery, state: FSMContext):
         personal_data = result.scalar_one_or_none()
         
         if not personal_data:
-            await callback.answer("Ошибка: данные не найдены", show_alert=True)
+            await callback.answer(_('Error: data not found'), show_alert=True)
             return
         
         # Получаем процент заполненности
@@ -61,14 +61,14 @@ async def start_personal_data(callback: types.CallbackQuery, state: FSMContext):
         )
         completion = ScoringCalculator.get_completion_percentage(schema)
         
-        text = f"👤 **Персональные данные**\n\n"
-        text += f"Заполнено: {completion}%\n\n"
-        text += "Чем больше данных вы укажете, тем выше будет ваш скоринг-балл.\n\n"
-        text += "Начнем с возраста. Сколько вам полных лет?"
+        text = f"👤 **{_('Personal data')}**\n\n"
+        text += f"{_('Profile completion')}: {completion}%\n\n"
+        text += f"{_('Fill in all data to increase score')}\n\n"
+        text += _('Enter your age')
         
         await callback.message.edit_text(
             text,
-            reply_markup=Keyboards.cancel_button(),
+            reply_markup=Keyboards.cancel_button(_),
             parse_mode="Markdown"
         )
         
@@ -79,33 +79,32 @@ async def start_personal_data(callback: types.CallbackQuery, state: FSMContext):
 
 
 @router.message(PersonalDataStates.entering_age)
-async def process_age(message: types.Message, state: FSMContext):
+async def process_age(message: types.Message, state: FSMContext, _: callable):
     """Обработка возраста"""
-    valid, age, error = validate_age(message.text)
+    valid, age, error = validate_age(message.text, _)
     
     if not valid:
-        await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button())
+        await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
         return
     
     await state.update_data(age=age)
     
     await message.answer(
-        "Укажите ваш пол:",
-        reply_markup=Keyboards.gender_choice()
+        _('Choose your gender'),
+        reply_markup=Keyboards.gender_choice(_)
     )
     await state.set_state(PersonalDataStates.choosing_gender)
 
 
 @router.callback_query(PersonalDataStates.choosing_gender, F.data.startswith("gender:"))
-async def process_gender(callback: types.CallbackQuery, state: FSMContext):
+async def process_gender(callback: types.CallbackQuery, state: FSMContext, _: callable):
     """Обработка выбора пола"""
     gender = callback.data.split(":")[1]
     await state.update_data(gender=gender)
     
     await callback.message.edit_text(
-        "Сколько месяцев вы работаете на текущем месте работы?\n"
-        "(введите 0, если не работаете)",
-        reply_markup=Keyboards.cancel_button()
+        _('Enter work experience in months'),
+        reply_markup=Keyboards.cancel_button(_)
     )
     await state.set_state(PersonalDataStates.entering_work_experience)
     await callback.answer()

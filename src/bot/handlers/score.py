@@ -16,7 +16,7 @@ router = Router(name="score")
 
 @router.message(Command("score"))
 @router.callback_query(F.data == "my_score")
-async def show_score(event: types.Message | types.CallbackQuery):
+async def show_score(event: types.Message | types.CallbackQuery, _: callable):
     """Показать текущие показатели ПДН и скоринга"""
     # Определяем тип события
     if isinstance(event, types.CallbackQuery):
@@ -36,7 +36,7 @@ async def show_score(event: types.Message | types.CallbackQuery):
         user = result.scalar_one_or_none()
         
         if not user:
-            error_text = "Вы еще не зарегистрированы. Используйте /start для начала."
+            error_text = _('You are not registered. Use /start to begin.')
             if is_callback:
                 await event.answer(error_text, show_alert=True)
             else:
@@ -59,50 +59,50 @@ async def show_score(event: types.Message | types.CallbackQuery):
         personal_data = result.scalar_one_or_none()
         
         # Формируем сообщение
-        text = "📊 **Ваши финансовые показатели**\n\n"
+        text = f"📊 **{_('Your financial indicators')}**\n\n"
         
         # Раздел ПДН
-        text += "💳 **Показатель долговой нагрузки (ПДН)**\n"
+        text += f"💳 **{_('Debt burden indicator (DTI)')}**\n"
         if application:
             pdn_status = PDNCalculator.get_pdn_status(application.pdn_value)
             pdn_emoji = PDNCalculator.get_pdn_emoji(pdn_status)
             
-            text += f"{pdn_emoji} ПДН: **{application.pdn_value}%**\n"
+            text += f"{pdn_emoji} {_('DTI')}: **{application.pdn_value}%**\n"
             
             # Описание статуса
             if pdn_status.value == "green":
-                text += "✅ Отличный показатель!\n"
+                text += f"✅ {_('Excellent indicator!')}\n"
             elif pdn_status.value == "yellow":
-                text += "⚠️ Приемлемый показатель\n"
+                text += f"⚠️ {_('Acceptable indicator')}\n"
             else:
-                text += "❌ Высокая долговая нагрузка\n"
+                text += f"❌ {_('High debt burden')}\n"
             
             # Детали расчета
-            text += f"\nДетали расчета:\n"
-            text += f"• Ежемесячный платеж: {format_amount(application.monthly_payment)} сум\n"
+            text += f"\n{_('Calculation details')}:\n"
+            text += f"• {_('Monthly payment')}: {format_amount(application.monthly_payment)} {_('sum')}\n"
             
             if personal_data and personal_data.monthly_income:
-                text += f"• Ежемесячный доход: {format_amount(personal_data.monthly_income)} сум\n"
+                text += f"• {_('Income')}: {format_amount(personal_data.monthly_income)} {_('sum')}\n"
                 
                 if personal_data.has_other_loans and personal_data.other_loans_monthly_payment:
-                    text += f"• Другие платежи: {format_amount(personal_data.other_loans_monthly_payment)} сум\n"
+                    text += f"• {_('Other payments')}: {format_amount(personal_data.other_loans_monthly_payment)} {_('sum')}\n"
             
             # Возможность получения кредита
             if PDNCalculator.can_get_loan(application.pdn_value):
-                text += "\n✅ Банки могут одобрить кредит\n"
+                text += f"\n✅ {_('Banks may approve the loan')}\n"
             else:
-                text += "\n❌ При ПДН > 50% банки не выдают кредиты\n"
+                text += f"\n❌ {_('Banks do not issue loans with DTI > 50%')}\n"
         else:
-            text += "📋 У вас нет активных заявок\n"
-            text += "Создайте заявку для расчета ПДН\n"
+            text += f"📋 {_('You have no active applications')}\n"
+            text += f"{_('Create application to calculate DTI')}\n"
         
         # Раздел Скоринга
-        text += "\n🎯 **Кредитный скоринг**\n"
+        text += f"\n🎯 **{_('Credit scoring')}**\n"
         if personal_data and personal_data.current_score > 0:
             score = personal_data.current_score
             level = ScoringCalculator.get_score_level(score)
             
-            text += f"Ваш балл: **{score}** ({level})\n"
+            text += f"{_('Your score')}: **{score}** ({level})\n"
             
             # Шкала прогресса
             min_score = 300
@@ -137,36 +137,36 @@ async def show_score(event: types.Message | types.CallbackQuery):
             )
             completion = ScoringCalculator.get_completion_percentage(schema)
             
-            text += f"\n📝 Профиль заполнен на {completion}%\n"
+            text += f"\n📝 {_('Profile completion')} {completion}%\n"
             
             if completion < 100:
-                text += "💡 Заполните все данные для увеличения балла\n"
+                text += f"💡 {_('Fill in all data to increase score')}\n"
         else:
-            text += "❓ Скоринг не рассчитан\n"
-            text += "Заполните персональные данные для расчета\n"
+            text += f"❓ {_('Scoring not calculated')}\n"
+            text += f"{_('Fill personal data for calculation')}\n"
         
         # Кнопки действий
         keyboard = []
         
         if not application:
             keyboard.append([types.InlineKeyboardButton(
-                text="💳 Создать заявку",
+                text=f"💳 {_('Create application')}",
                 callback_data="new_loan"
             )])
         
         if not personal_data or personal_data.current_score == 0:
             keyboard.append([types.InlineKeyboardButton(
-                text="👤 Заполнить данные",
+                text=f"👤 {_('Fill data')}",
                 callback_data="personal_data"
             )])
         elif completion < 100:
             keyboard.append([types.InlineKeyboardButton(
-                text="📝 Дополнить данные",
+                text=f"📝 {_('Complete data')}",
                 callback_data="personal_data"
             )])
         
         keyboard.append([types.InlineKeyboardButton(
-            text="🔙 В главное меню",
+            text=f"🔙 {_('Main menu')}",
             callback_data="main_menu"
         )])
         

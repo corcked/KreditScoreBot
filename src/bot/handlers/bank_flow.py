@@ -18,7 +18,7 @@ router = Router(name="bank_flow")
 
 
 @router.callback_query(F.data == "send_to_bank")
-async def start_send_to_bank(callback: types.CallbackQuery, state: FSMContext):
+async def start_send_to_bank(callback: types.CallbackQuery, state: FSMContext, _: callable):
     """Начало процесса отправки в банк"""
     async with get_db_context() as db:
         # Получаем пользователя
@@ -28,7 +28,7 @@ async def start_send_to_bank(callback: types.CallbackQuery, state: FSMContext):
         user = result.scalar_one_or_none()
         
         if not user:
-            await callback.answer("Ошибка: пользователь не найден", show_alert=True)
+            await callback.answer(_('Error: user not found'), show_alert=True)
             return
         
         # Получаем активную заявку
@@ -42,7 +42,7 @@ async def start_send_to_bank(callback: types.CallbackQuery, state: FSMContext):
         application = result.scalar_one_or_none()
         
         if not application:
-            await callback.answer("Активная заявка не найдена", show_alert=True)
+            await callback.answer(_('Active application not found'), show_alert=True)
             return
         
         # Проверяем ПДН

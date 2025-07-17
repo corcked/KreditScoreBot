@@ -184,6 +184,8 @@ TRANSLATIONS = {
         "Incorrect phone number. Try again.": "Некорректный номер телефона. Попробуйте еще раз.",
         "You are not registered. Use /start to begin.": "Вы еще не зарегистрированы. Используйте /start для начала.",
         "Error: user not found": "Ошибка: пользователь не найден",
+        "Error: data not found": "Ошибка: данные не найдены",
+        "Active application not found": "Активная заявка не найдена",
         "Enter correct amount (numbers only)": "Введите корректную сумму (только цифры)",
         "Amount must be positive": "Сумма должна быть положительной",
         "Maximum amount": "Максимальная сумма",
@@ -197,6 +199,14 @@ TRANSLATIONS = {
         "Application created successfully!": "Заявка успешно создана!",
         "Personal data saved!": "Личные данные сохранены!",
         "Language changed successfully": "Язык успешно изменен",
+        
+        # Реферальная программа - дополнительные
+        "Share this link with friends. When they register using your link, you will automatically receive bonus points!": "Поделитесь этой ссылкой с друзьями. Когда они зарегистрируются в боте по вашей ссылке, вы автоматически получите бонусные баллы!",
+        "discover your credit rating!": "узнай свой кредитный рейтинг!",
+        "Instant debt burden calculation": "Мгновенный расчет долговой нагрузки",
+        "Credit approval probability assessment": "Оценка вероятности одобрения кредита",
+        "Best offers from banks": "Лучшие предложения от банков",
+        "Start now": "Начни прямо сейчас",
     },
     "uz": {
         # Общие
@@ -280,6 +290,8 @@ TRANSLATIONS = {
         "Incorrect phone number. Try again.": "Noto'g'ri telefon raqami. Qayta urinib ko'ring.",
         "You are not registered. Use /start to begin.": "Siz ro'yxatdan o'tmagansiz. Boshlash uchun /start dan foydalaning.",
         "Error: user not found": "Xato: foydalanuvchi topilmadi",
+        "Error: data not found": "Xato: ma'lumotlar topilmadi",
+        "Active application not found": "Faol ariza topilmadi",
         "Enter correct amount (numbers only)": "To'g'ri summani kiriting (faqat raqamlar)",
         "Amount must be positive": "Summa musbat bo'lishi kerak",
         "Maximum amount": "Maksimal summa",
@@ -293,6 +305,14 @@ TRANSLATIONS = {
         "Application created successfully!": "Ariza muvaffaqiyatli yaratildi!",
         "Personal data saved!": "Shaxsiy ma'lumotlar saqlandi!",
         "Language changed successfully": "Til muvaffaqiyatli o'zgartirildi",
+        
+        # Реферальная программа - дополнительные
+        "Share this link with friends. When they register using your link, you will automatically receive bonus points!": "Bu havolani do'stlaringiz bilan ulashing. Ular sizning havolangiz orqali ro'yxatdan o'tganlarida, siz avtomatik ravishda bonus ballar olasiz!",
+        "discover your credit rating!": "kredit reytingingizni bilib oling!",
+        "Instant debt burden calculation": "Qarz yukini tezkor hisoblash",
+        "Credit approval probability assessment": "Kredit tasdiqlash ehtimolini baholash",
+        "Best offers from banks": "Banklarning eng yaxshi takliflari",
+        "Start now": "Hoziroq boshlang",
     }
 }
 
