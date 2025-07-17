@@ -528,3 +528,20 @@ msgstr "Реферальная программа"
 
 msgid "Help"
 msgstr "Помощь"
+
+# Additional units
+msgid "billion"
+msgstr "млрд"
+
+msgid "million"
+msgstr "млн"
+
+# PDN descriptions
+msgid "Excellent indicator! Banks will readily approve the loan."
+msgstr "Отличный показатель! Банки охотно одобрят кредит."
+
+msgid "Acceptable indicator. Loan approval is possible."
+msgstr "Приемлемый показатель. Возможно одобрение кредита."
+
+msgid "High debt burden! Banks won't be able to issue a loan."
+msgstr "Высокая долговая нагрузка! Банки не смогут выдать кредит."

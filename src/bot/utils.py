@@ -45,96 +45,102 @@ def validate_phone_number(phone: str) -> Optional[str]:
     return None
 
 
-def validate_amount(text: str, max_amount: int) -> Tuple[bool, Optional[Decimal], Optional[str]]:
+def validate_amount(text: str, max_amount: int, translate=None) -> Tuple[bool, Optional[Decimal], Optional[str]]:
     """
     Валидация суммы
     
     Args:
         text: Введенный текст
         max_amount: Максимальная сумма
+        translate: Функция перевода
         
     Returns:
         (валидна, сумма, сообщение об ошибке)
     """
+    _ = translate if translate else lambda x: x
     try:
         # Удаляем пробелы и запятые
         clean_text = text.replace(' ', '').replace(',', '')
         amount = Decimal(clean_text)
         
         if amount <= 0:
-            return False, None, "Сумма должна быть положительной"
+            return False, None, _('Amount must be positive')
         
         if amount > max_amount:
-            return False, None, f"Максимальная сумма: {format_amount(max_amount)} сум"
+            return False, None, f"{_('Maximum amount')}: {format_amount(max_amount)} {_('sum')}"
         
         return True, amount, None
     except:
-        return False, None, "Введите корректную сумму (только цифры)"
+        return False, None, _('Enter correct amount (numbers only)')
 
 
-def validate_rate(text: str, min_rate: Decimal, max_rate: Decimal) -> Tuple[bool, Optional[Decimal], Optional[str]]:
+def validate_rate(text: str, min_rate: Decimal, max_rate: Decimal, translate=None) -> Tuple[bool, Optional[Decimal], Optional[str]]:
     """
     Валидация процентной ставки
     
     Returns:
         (валидна, ставка, сообщение об ошибке)
     """
+    _ = translate if translate else lambda x: x
     try:
         rate = Decimal(text.replace(',', '.'))
         
         if rate < min_rate or rate > max_rate:
-            return False, None, f"Ставка должна быть от {min_rate}% до {max_rate}%"
+            return False, None, f"{_('Rate must be between')} {min_rate}% {_('and')} {max_rate}%"
         
         return True, rate, None
     except:
-        return False, None, "Введите корректную процентную ставку"
+        return False, None, _('Enter correct interest rate')
 
 
-def validate_term(text: str, min_months: int, max_months: int) -> Tuple[bool, Optional[int], Optional[str]]:
+def validate_term(text: str, min_months: int, max_months: int, translate=None) -> Tuple[bool, Optional[int], Optional[str]]:
     """
     Валидация срока кредита
     
     Returns:
         (валиден, срок в месяцах, сообщение об ошибке)
     """
+    _ = translate if translate else lambda x: x
     try:
         months = int(text)
         
         if months < min_months or months > max_months:
-            return False, None, f"Срок должен быть от {min_months} до {max_months} месяцев"
+            return False, None, f"{_('Term must be from')} {min_months} {_('to')} {max_months} {_('months')}"
         
         return True, months, None
     except:
-        return False, None, "Введите количество месяцев (только цифры)"
+        return False, None, _('Enter number of months (numbers only)')
 
 
-def validate_age(text: str) -> Tuple[bool, Optional[int], Optional[str]]:
+def validate_age(text: str, translate=None) -> Tuple[bool, Optional[int], Optional[str]]:
     """Валидация возраста"""
+    _ = translate if translate else lambda x: x
     try:
         age = int(text)
         
         if age < 18:
-            return False, None, "Вы должны быть старше 18 лет"
+            return False, None, _('You must be over 18 years old')
         
         if age > 100:
-            return False, None, "Введите корректный возраст"
+            return False, None, _('Enter correct age')
         
         return True, age, None
     except:
-        return False, None, "Введите возраст (только цифры)"
+        return False, None, _('Enter age (numbers only)')
 
 
-def validate_positive_number(text: str, field_name: str) -> Tuple[bool, Optional[int], Optional[str]]:
+def validate_positive_number(text: str, field_name: str, translate=None) -> Tuple[bool, Optional[int], Optional[str]]:
     """Валидация положительного числа"""
+    _ = translate if translate else lambda x: x
     try:
         number = int(text)
         
         if number < 0:
-            return False, None, f"{field_name} не может быть отрицательным"
+            return False, None, f"{field_name} {_('cannot be negative')}"
         
         return True, number, None
     except:
-        return False, None, f"Введите {field_name.lower()} (только цифры)"
+        return False, None, f"{_('Enter')} {field_name.lower()} {_('(numbers only)')}"
 
 
 def format_amount(amount: Decimal) -> str:
@@ -142,19 +148,20 @@ def format_amount(amount: Decimal) -> str:
     return f"{amount:,.0f}".replace(",", " ")
 
 
-def format_loan_summary(loan_data: dict) -> str:
+def format_loan_summary(loan_data: dict, translate=None) -> str:
     """Форматирование сводки по кредиту"""
-    loan_type = "Автокредит" if loan_data["loan_type"] == "carloan" else "Микрозайм"
+    _ = translate if translate else lambda x: x
+    loan_type = _('Car loan') if loan_data["loan_type"] == "carloan" else _('Microloan')
     
     summary = f"**{loan_type}**\n\n"
-    summary += f"💰 Сумма: {format_amount(loan_data['amount'])} сум\n"
-    summary += f"📊 Ставка: {loan_data['rate']}%\n"
-    summary += f"📅 Срок: {loan_data['term_months']} мес.\n"
-    summary += f"💳 Ежемесячный платеж: {format_amount(loan_data['monthly_payment'])} сум\n"
-    summary += f"💸 Доход: {format_amount(loan_data['income'])} сум\n"
+    summary += f"💰 {_('Amount')}: {format_amount(loan_data['amount'])} {_('sum')}\n"
+    summary += f"📊 {_('Rate')}: {loan_data['rate']}%\n"
+    summary += f"📅 {_('Term')}: {loan_data['term_months']} {_('months')}\n"
+    summary += f"💳 {_('Monthly payment')}: {format_amount(loan_data['monthly_payment'])} {_('sum')}\n"
+    summary += f"💸 {_('Income')}: {format_amount(loan_data['income'])} {_('sum')}\n"
     
     if loan_data.get('other_payments'):
-        summary += f"💵 Другие платежи: {format_amount(loan_data['other_payments'])} сум\n"
+        summary += f"💵 {_('Other payments')}: {format_amount(loan_data['other_payments'])} {_('sum')}\n"
     
     return summary
 
