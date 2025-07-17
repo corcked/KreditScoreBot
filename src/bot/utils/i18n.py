@@ -208,12 +208,12 @@ TRANSLATIONS = {
         "Best offers from banks": "Лучшие предложения от банков",
         "Start now": "Начни прямо сейчас",
         
-        # Дополнительные строки с апострофами
-        "Welcome! I\\'m KreditScore Bot.": "Добро пожаловать! Я бот KreditScore.",
-        "I\\'ll help you:": "Я помогу вам:",
-        "If yes, enter total amount. If no, click \\'Skip\\'.": "Если да, введите общую сумму. Если нет, нажмите 'Пропустить'.",
-        "Attention! With DTI > 50% banks won\\'t issue a loan.": "При ПДН > 50% банки не выдают кредиты",
-        "What\\'s next?": "Что дальше?",
+        # Дополнительные строки
+        "Welcome! I am KreditScore Bot.": "Добро пожаловать! Я бот KreditScore.",
+        "I will help you:": "Я помогу вам:",
+        "If yes, enter total amount. If no, click Skip.": "Если да, введите общую сумму. Если нет, нажмите 'Пропустить'.",
+        "Attention! With DTI > 50% banks wont issue a loan.": "При ПДН > 50% банки не выдают кредиты",
+        "What next?": "Что дальше?",
         
         # Bank flow
         "With DTI > 50% banks won't approve loan": "При ПДН > 50% банки не смогут выдать кредит",
@@ -367,12 +367,12 @@ TRANSLATIONS = {
         "Best offers from banks": "Banklarning eng yaxshi takliflari",
         "Start now": "Hoziroq boshlang",
         
-        # Дополнительные строки с апострофами
-        "Welcome! I\\'m KreditScore Bot.": "Xush kelibsiz! Men KreditScore botiman.",
-        "I\\'ll help you:": "Men sizga yordam beraman:",
-        "If yes, enter total amount. If no, click \\'Skip\\'.": "Ha bo'lsa, umumiy summani kiriting. Yo'q bo'lsa, 'O'tkazib yuborish' tugmasini bosing.",
-        "Attention! With DTI > 50% banks won\\'t issue a loan.": "QYK > 50% bo'lsa banklar kredit bermaydi",
-        "What\\'s next?": "Keyin nima?",
+        # Дополнительные строки
+        "Welcome! I am KreditScore Bot.": "Xush kelibsiz! Men KreditScore botiman.",
+        "I will help you:": "Men sizga yordam beraman:",
+        "If yes, enter total amount. If no, click Skip.": "Ha bo'lsa, umumiy summani kiriting. Yo'q bo'lsa, 'O'tkazib yuborish' tugmasini bosing.",
+        "Attention! With DTI > 50% banks wont issue a loan.": "QYK > 50% bo'lsa banklar kredit bermaydi",
+        "What next?": "Keyin nima?",
         
         # Bank flow
         "With DTI > 50% banks won't approve loan": "QYK > 50% bo'lsa banklar kredit bermaydi",
