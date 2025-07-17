@@ -21,11 +21,26 @@ def validate_phone_number(phone: str) -> Optional[str]:
     # Удаляем все не-цифры
     digits = re.sub(r'\D', '', phone)
     
-    # Проверяем длину и формат (для Узбекистана)
+    # Проверяем различные форматы
+    # Узбекистан
     if len(digits) == 12 and digits.startswith('998'):
         return f"+{digits}"
     elif len(digits) == 9 and digits.startswith('9'):
         return f"+998{digits}"
+    
+    # Россия
+    elif len(digits) == 11 and digits.startswith('7'):
+        return f"+{digits}"
+    elif len(digits) == 10 and digits.startswith('9'):
+        return f"+7{digits}"
+    elif len(digits) == 11 and digits.startswith('8'):
+        # Заменяем 8 на +7 для российских номеров
+        return f"+7{digits[1:]}"
+    
+    # Международный формат с плюсом
+    elif len(digits) >= 10 and len(digits) <= 15:
+        # Принимаем любой международный номер разумной длины
+        return f"+{digits}"
     
     return None
 
