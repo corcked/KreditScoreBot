@@ -60,7 +60,7 @@ async def process_language_choice(callback: types.CallbackQuery, _: callable):
     
     # Отправляем сообщение на новом языке
     # Для этого нужно обновить контекст локализации
-    from src.bot.utils.i18n import simple_gettext
+    from src.bot.i18n import simple_gettext
     new_translate = lambda msg: simple_gettext(lang_code, msg)
     
     await callback.message.edit_text(

@@ -141,7 +141,7 @@ async def simulate_bank_response(bot, user_telegram_id: int, application_id: int
     
     async with get_db_context() as db:
         # Получаем язык пользователя
-        from src.bot.utils.i18n import simple_gettext
+        from src.bot.i18n import simple_gettext
         result = await db.execute(
             select(User).where(User.telegram_id == user_telegram_id)
         )

@@ -4,7 +4,7 @@ from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message, TelegramObject
 from sqlalchemy import select
 
-from src.bot.utils.i18n import I18nContext, get_user_language, simple_gettext
+from src.bot.i18n import I18nContext, get_user_language, simple_gettext
 from src.db.database import get_db_context
 from src.db.models import User
 

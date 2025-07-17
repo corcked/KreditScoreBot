@@ -176,7 +176,7 @@ async def process_language(callback: types.CallbackQuery, state: FSMContext, _: 
             await db.commit()
     
     # Обновляем функцию перевода для нового языка
-    from src.bot.utils.i18n import simple_gettext
+    from src.bot.i18n import simple_gettext
     new_translate = lambda msg: simple_gettext(language, msg)
     
     # Завершаем онбординг
