@@ -1,0 +1,530 @@
+# Uzbek translations for KreditScore Bot
+# Copyright (C) 2024
+# This file is distributed under the same license as the KreditScore Bot package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: KreditScore Bot 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Uzbek\n"
+"Language: uz\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+# Common
+msgid "Back"
+msgstr "Orqaga"
+
+msgid "Cancel"
+msgstr "Bekor qilish"
+
+msgid "Main menu"
+msgstr "Asosiy menyu"
+
+msgid "Settings"
+msgstr "Sozlamalar"
+
+msgid "Language"
+msgstr "Til"
+
+msgid "Choose language"
+msgstr "Tilni tanlang"
+
+msgid "Skip"
+msgstr "O'tkazib yuborish"
+
+msgid "Next"
+msgstr "Keyingi"
+
+msgid "sum"
+msgstr "so'm"
+
+# Welcome
+msgid "Welcome! I'm KreditScore Bot."
+msgstr "Xush kelibsiz! Men KreditScore botiman."
+
+msgid "I'll help you:"
+msgstr "Men sizga yordam beraman:"
+
+msgid "Calculate debt burden indicator"
+msgstr "Qarz yuki ko'rsatkichini hisoblash"
+
+msgid "Get credit score"
+msgstr "Kredit skoringni olish"
+
+msgid "Apply for a loan"
+msgstr "Kredit uchun ariza berish"
+
+msgid "Share your phone number to continue"
+msgstr "Davom etish uchun telefon raqamingizni ulashing"
+
+msgid "Share phone number"
+msgstr "Telefon raqamini ulashish"
+
+# Main menu
+msgid "New application"
+msgstr "Yangi ariza"
+
+msgid "My applications"
+msgstr "Mening arizalarim"
+
+msgid "My indicators"
+msgstr "Mening ko'rsatkichlarim"
+
+msgid "Personal data"
+msgstr "Shaxsiy ma'lumotlar"
+
+msgid "Referral program"
+msgstr "Referal dasturi"
+
+# Loans
+msgid "Choose loan type"
+msgstr "Kredit turini tanlang"
+
+msgid "Car loan"
+msgstr "Avtokredit"
+
+msgid "Microloan"
+msgstr "Mikroqarz"
+
+msgid "Up to"
+msgstr "gacha"
+
+msgid "Rate"
+msgstr "Stavka"
+
+msgid "Term"
+msgstr "Muddat"
+
+msgid "months"
+msgstr "oy"
+
+msgid "years"
+msgstr "yil"
+
+msgid "Choose car condition"
+msgstr "Avtomobil holatini tanlang"
+
+msgid "New"
+msgstr "Yangi"
+
+msgid "Used"
+msgstr "Ishlatilgan"
+
+msgid "Choose receive method"
+msgstr "Pul olish usulini tanlang"
+
+msgid "To card"
+msgstr "Kartaga"
+
+msgid "Cash"
+msgstr "Naqd pul"
+
+msgid "Enter loan amount"
+msgstr "Kredit summasini kiriting"
+
+msgid "Enter interest rate"
+msgstr "Foiz stavkasini kiriting"
+
+msgid "Enter loan term in months"
+msgstr "Kredit muddatini oylarda kiriting"
+
+msgid "Enter your monthly income"
+msgstr "Oylik daromadingizni kiriting"
+
+msgid "Do you have monthly payments for other loans?"
+msgstr "Boshqa kreditlar bo'yicha oylik to'lovlaringiz bormi?"
+
+msgid "If yes, enter total amount. If no, click 'Skip'."
+msgstr "Agar ha bo'lsa, umumiy summani kiriting. Yo'q bo'lsa, 'O'tkazib yuborish' tugmasini bosing."
+
+msgid "Check application data"
+msgstr "Ariza ma'lumotlarini tekshiring"
+
+msgid "Amount"
+msgstr "Summa"
+
+msgid "Monthly payment"
+msgstr "Oylik to'lov"
+
+msgid "Income"
+msgstr "Daromad"
+
+msgid "Other payments"
+msgstr "Boshqa to'lovlar"
+
+msgid "All correct?"
+msgstr "Hammasi to'g'rimi?"
+
+msgid "Confirm"
+msgstr "Tasdiqlash"
+
+msgid "Application created successfully!"
+msgstr "Ariza muvaffaqiyatli yaratildi!"
+
+msgid "What's next?"
+msgstr "Keyingi qadam?"
+
+msgid "Send to bank"
+msgstr "Bankka yuborish"
+
+msgid "Your current application"
+msgstr "Sizning joriy arizangiz"
+
+msgid "Date"
+msgstr "Sana"
+
+msgid "Status"
+msgstr "Holat"
+
+msgid "Sent to bank"
+msgstr "Bankka yuborildi"
+
+msgid "Archived"
+msgstr "Arxivda"
+
+msgid "You have no active applications."
+msgstr "Sizda faol arizalar yo'q."
+
+msgid "Create new application to calculate debt burden."
+msgstr "Qarz yukini hisoblash uchun yangi ariza yarating."
+
+# DTI and Scoring
+msgid "Your financial indicators"
+msgstr "Sizning moliyaviy ko'rsatkichlaringiz"
+
+msgid "Debt burden indicator (DTI)"
+msgstr "Qarz yuki ko'rsatkichi (QYK)"
+
+msgid "DTI"
+msgstr "QYK"
+
+msgid "Excellent indicator!"
+msgstr "A'lo ko'rsatkich!"
+
+msgid "Acceptable indicator"
+msgstr "Qoniqarli ko'rsatkich"
+
+msgid "High debt burden"
+msgstr "Yuqori qarz yuki"
+
+msgid "Calculation details"
+msgstr "Hisoblash tafsilotlari"
+
+msgid "Banks may approve the loan"
+msgstr "Banklar kreditni tasdiqlashi mumkin"
+
+msgid "Banks do not issue loans with DTI > 50%"
+msgstr "QYK > 50% bo'lsa banklar kredit bermaydi"
+
+msgid "You have no active applications"
+msgstr "Sizda faol arizalar yo'q"
+
+msgid "Create application to calculate DTI"
+msgstr "QYKni hisoblash uchun ariza yarating"
+
+msgid "Credit scoring"
+msgstr "Kredit skoring"
+
+msgid "Your score"
+msgstr "Sizning balingiz"
+
+msgid "Profile completion"
+msgstr "Profil to'ldirilgan"
+
+msgid "Fill in all data to increase score"
+msgstr "Balni oshirish uchun barcha ma'lumotlarni to'ldiring"
+
+msgid "Scoring not calculated"
+msgstr "Skoring hisoblanmagan"
+
+msgid "Fill personal data for calculation"
+msgstr "Hisoblash uchun shaxsiy ma'lumotlarni to'ldiring"
+
+msgid "Create application"
+msgstr "Ariza yaratish"
+
+msgid "Fill data"
+msgstr "Ma'lumotlarni to'ldirish"
+
+msgid "Complete data"
+msgstr "Ma'lumotlarni to'ldirish"
+
+# Personal data
+msgid "Fill personal data"
+msgstr "Shaxsiy ma'lumotlarni to'ldirish"
+
+msgid "Enter your age"
+msgstr "Yoshingizni kiriting"
+
+msgid "Age"
+msgstr "Yosh"
+
+msgid "Choose your gender"
+msgstr "Jinsingizni tanlang"
+
+msgid "Gender"
+msgstr "Jins"
+
+msgid "Male"
+msgstr "Erkak"
+
+msgid "Female"
+msgstr "Ayol"
+
+msgid "Choose marital status"
+msgstr "Oilaviy holatni tanlang"
+
+msgid "Marital status"
+msgstr "Oilaviy holat"
+
+msgid "Single"
+msgstr "Turmush qurmagan"
+
+msgid "Married"
+msgstr "Turmush qurgan"
+
+msgid "Divorced"
+msgstr "Ajrashgan"
+
+msgid "Widowed"
+msgstr "Beva"
+
+msgid "Choose education level"
+msgstr "Ta'lim darajasini tanlang"
+
+msgid "Education"
+msgstr "Ta'lim"
+
+msgid "Secondary"
+msgstr "O'rta"
+
+msgid "Vocational"
+msgstr "O'rta maxsus"
+
+msgid "Incomplete higher"
+msgstr "Tugallanmagan oliy"
+
+msgid "Higher"
+msgstr "Oliy"
+
+msgid "Postgraduate"
+msgstr "Oliy ta'limdan keyingi"
+
+msgid "Choose housing status"
+msgstr "Uy-joy holatini tanlang"
+
+msgid "Housing status"
+msgstr "Uy-joy holati"
+
+msgid "Own"
+msgstr "Shaxsiy"
+
+msgid "Own with mortgage"
+msgstr "Shaxsiy (ipoteka)"
+
+msgid "Rent"
+msgstr "Ijara"
+
+msgid "With relatives"
+msgstr "Qarindoshlar bilan"
+
+msgid "Choose your region"
+msgstr "Viloyatingizni tanlang"
+
+msgid "Region"
+msgstr "Viloyat"
+
+msgid "Tashkent"
+msgstr "Toshkent"
+
+msgid "Tashkent region"
+msgstr "Toshkent viloyati"
+
+msgid "Enter work experience in months"
+msgstr "Ish stajini oylarda kiriting"
+
+msgid "Work experience (months)"
+msgstr "Ish staji (oy)"
+
+msgid "Enter years at current address"
+msgstr "Joriy manzilda necha yil yashayotganingizni kiriting"
+
+msgid "Years at current address"
+msgstr "Joriy manzilda (yil)"
+
+msgid "Do you have other loans?"
+msgstr "Boshqa kreditlaringiz bormi?"
+
+msgid "Yes"
+msgstr "Ha"
+
+msgid "No"
+msgstr "Yo'q"
+
+msgid "Enter monthly payment for other loans"
+msgstr "Boshqa kreditlar bo'yicha oylik to'lovni kiriting"
+
+msgid "Enter number of closed loans"
+msgstr "Yopilgan kreditlar sonini kiriting"
+
+msgid "Number of closed loans"
+msgstr "Yopilgan kreditlar soni"
+
+msgid "Personal data saved!"
+msgstr "Shaxsiy ma'lumotlar saqlandi!"
+
+msgid "Your personal data"
+msgstr "Sizning shaxsiy ma'lumotlaringiz"
+
+msgid "years old"
+msgstr "yosh"
+
+msgid "Not filled"
+msgstr "To'ldirilmagan"
+
+msgid "Edit"
+msgstr "O'zgartirish"
+
+# Referral
+msgid "Referral Program"
+msgstr "Referal dasturi"
+
+msgid "Your referral code"
+msgstr "Sizning referal kodingiz"
+
+msgid "Referral link"
+msgstr "Referal havola"
+
+msgid "Invited users"
+msgstr "Taklif qilingan foydalanuvchilar"
+
+msgid "people"
+msgstr "kishi"
+
+msgid "Share"
+msgstr "Ulashish"
+
+msgid "Invite friends and get bonuses!"
+msgstr "Do'stlaringizni taklif qiling va bonuslar oling!"
+
+msgid "Your friend registered via your link!"
+msgstr "Do'stingiz sizning havolangiz orqali ro'yxatdan o'tdi!"
+
+# Bank flow
+msgid "To send application to bank, fill personal data"
+msgstr "Arizani bankka yuborish uchun shaxsiy ma'lumotlarni to'ldiring"
+
+msgid "Send application to bank?"
+msgstr "Arizani bankka yuborasizmi?"
+
+msgid "Application sent to bank!"
+msgstr "Ariza bankka yuborildi!"
+
+msgid "You'll be notified about bank's decision"
+msgstr "Bank qarori haqida sizga xabar beramiz"
+
+# Errors
+msgid "Incorrect phone number. Try again."
+msgstr "Noto'g'ri telefon raqami. Qayta urinib ko'ring."
+
+msgid "You are not registered. Use /start to begin."
+msgstr "Siz ro'yxatdan o'tmagansiz. Boshlash uchun /start dan foydalaning."
+
+msgid "Error: user not found"
+msgstr "Xato: foydalanuvchi topilmadi"
+
+msgid "Enter correct amount (numbers only)"
+msgstr "To'g'ri summani kiriting (faqat raqamlar)"
+
+msgid "Amount must be positive"
+msgstr "Summa musbat bo'lishi kerak"
+
+msgid "Maximum amount"
+msgstr "Maksimal summa"
+
+msgid "Rate must be between"
+msgstr "Stavka quyidagilar orasida bo'lishi kerak"
+
+msgid "and"
+msgstr "va"
+
+msgid "Enter correct interest rate"
+msgstr "To'g'ri foiz stavkasini kiriting"
+
+msgid "Term must be from"
+msgstr "Muddat quyidagilar orasida bo'lishi kerak"
+
+msgid "to"
+msgstr "gacha"
+
+msgid "Enter number of months (numbers only)"
+msgstr "Oylar sonini kiriting (faqat raqamlar)"
+
+msgid "You must be over 18 years old"
+msgstr "Siz 18 yoshdan katta bo'lishingiz kerak"
+
+msgid "Enter correct age"
+msgstr "To'g'ri yoshni kiriting"
+
+msgid "Enter age (numbers only)"
+msgstr "Yoshni kiriting (faqat raqamlar)"
+
+msgid "cannot be negative"
+msgstr "manfiy bo'lishi mumkin emas"
+
+msgid "Enter"
+msgstr "Kiriting"
+
+msgid "(numbers only)"
+msgstr "(faqat raqamlar)"
+
+msgid "Action cancelled"
+msgstr "Amal bekor qilindi"
+
+msgid "Application creation cancelled"
+msgstr "Ariza yaratish bekor qilindi"
+
+# Settings
+msgid "Language changed successfully"
+msgstr "Til muvaffaqiyatli o'zgartirildi"
+
+msgid "Current language"
+msgstr "Joriy til"
+
+msgid "Russian"
+msgstr "Rus tili"
+
+msgid "Uzbek"
+msgstr "O'zbek tili"
+
+# DTI Status descriptions
+msgid "Attention! With DTI > 50% banks won't issue a loan."
+msgstr "Diqqat! QYK > 50% bo'lsa banklar kredit bermaydi."
+
+# Help
+msgid "Available commands"
+msgstr "Mavjud buyruqlar"
+
+msgid "Start bot"
+msgstr "Botni boshlash"
+
+msgid "Main menu"
+msgstr "Asosiy menyu"
+
+msgid "My application"
+msgstr "Mening arizam"
+
+msgid "My indicators"
+msgstr "Mening ko'rsatkichlarim"
+
+msgid "Referral program"
+msgstr "Referal dasturi"
+
+msgid "Help"
+msgstr "Yordam"

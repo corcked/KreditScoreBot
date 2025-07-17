@@ -1,0 +1,530 @@
+# Russian translations for KreditScore Bot
+# Copyright (C) 2024
+# This file is distributed under the same license as the KreditScore Bot package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: KreditScore Bot 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+# Common
+msgid "Back"
+msgstr "Назад"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "Main menu"
+msgstr "Главное меню"
+
+msgid "Settings"
+msgstr "Настройки"
+
+msgid "Language"
+msgstr "Язык"
+
+msgid "Choose language"
+msgstr "Выберите язык"
+
+msgid "Skip"
+msgstr "Пропустить"
+
+msgid "Next"
+msgstr "Далее"
+
+msgid "sum"
+msgstr "сум"
+
+# Welcome
+msgid "Welcome! I'm KreditScore Bot."
+msgstr "Добро пожаловать! Я бот KreditScore."
+
+msgid "I'll help you:"
+msgstr "Я помогу вам:"
+
+msgid "Calculate debt burden indicator"
+msgstr "Рассчитать показатель долговой нагрузки"
+
+msgid "Get credit score"
+msgstr "Получить кредитный скоринг"
+
+msgid "Apply for a loan"
+msgstr "Подать заявку на кредит"
+
+msgid "Share your phone number to continue"
+msgstr "Поделитесь номером телефона для продолжения"
+
+msgid "Share phone number"
+msgstr "Поделиться номером"
+
+# Main menu
+msgid "New application"
+msgstr "Новая заявка"
+
+msgid "My applications"
+msgstr "Мои заявки"
+
+msgid "My indicators"
+msgstr "Мои показатели"
+
+msgid "Personal data"
+msgstr "Личные данные"
+
+msgid "Referral program"
+msgstr "Реферальная программа"
+
+# Loans
+msgid "Choose loan type"
+msgstr "Выберите тип кредита"
+
+msgid "Car loan"
+msgstr "Автокредит"
+
+msgid "Microloan"
+msgstr "Микрозайм"
+
+msgid "Up to"
+msgstr "До"
+
+msgid "Rate"
+msgstr "Ставка"
+
+msgid "Term"
+msgstr "Срок"
+
+msgid "months"
+msgstr "мес"
+
+msgid "years"
+msgstr "лет"
+
+msgid "Choose car condition"
+msgstr "Выберите состояние автомобиля"
+
+msgid "New"
+msgstr "Новый"
+
+msgid "Used"
+msgstr "Подержанный"
+
+msgid "Choose receive method"
+msgstr "Выберите способ получения денег"
+
+msgid "To card"
+msgstr "На карту"
+
+msgid "Cash"
+msgstr "Наличными"
+
+msgid "Enter loan amount"
+msgstr "Введите сумму кредита"
+
+msgid "Enter interest rate"
+msgstr "Введите процентную ставку"
+
+msgid "Enter loan term in months"
+msgstr "Введите срок кредита в месяцах"
+
+msgid "Enter your monthly income"
+msgstr "Введите ваш ежемесячный доход"
+
+msgid "Do you have monthly payments for other loans?"
+msgstr "Есть ли у вас ежемесячные платежи по другим кредитам?"
+
+msgid "If yes, enter total amount. If no, click 'Skip'."
+msgstr "Если да, введите общую сумму. Если нет, нажмите 'Пропустить'."
+
+msgid "Check application data"
+msgstr "Проверьте данные заявки"
+
+msgid "Amount"
+msgstr "Сумма"
+
+msgid "Monthly payment"
+msgstr "Ежемесячный платеж"
+
+msgid "Income"
+msgstr "Доход"
+
+msgid "Other payments"
+msgstr "Другие платежи"
+
+msgid "All correct?"
+msgstr "Все верно?"
+
+msgid "Confirm"
+msgstr "Подтвердить"
+
+msgid "Application created successfully!"
+msgstr "Заявка успешно создана!"
+
+msgid "What's next?"
+msgstr "Что дальше?"
+
+msgid "Send to bank"
+msgstr "Отправить в банк"
+
+msgid "Your current application"
+msgstr "Ваша текущая заявка"
+
+msgid "Date"
+msgstr "Дата"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Sent to bank"
+msgstr "Отправлена в банк"
+
+msgid "Archived"
+msgstr "В архиве"
+
+msgid "You have no active applications."
+msgstr "У вас нет активных заявок."
+
+msgid "Create new application to calculate debt burden."
+msgstr "Создайте новую заявку для расчета долговой нагрузки."
+
+# DTI and Scoring
+msgid "Your financial indicators"
+msgstr "Ваши финансовые показатели"
+
+msgid "Debt burden indicator (DTI)"
+msgstr "Показатель долговой нагрузки (ПДН)"
+
+msgid "DTI"
+msgstr "ПДН"
+
+msgid "Excellent indicator!"
+msgstr "Отличный показатель!"
+
+msgid "Acceptable indicator"
+msgstr "Приемлемый показатель"
+
+msgid "High debt burden"
+msgstr "Высокая долговая нагрузка"
+
+msgid "Calculation details"
+msgstr "Детали расчета"
+
+msgid "Banks may approve the loan"
+msgstr "Банки могут одобрить кредит"
+
+msgid "Banks do not issue loans with DTI > 50%"
+msgstr "При ПДН > 50% банки не выдают кредиты"
+
+msgid "You have no active applications"
+msgstr "У вас нет активных заявок"
+
+msgid "Create application to calculate DTI"
+msgstr "Создайте заявку для расчета ПДН"
+
+msgid "Credit scoring"
+msgstr "Кредитный скоринг"
+
+msgid "Your score"
+msgstr "Ваш балл"
+
+msgid "Profile completion"
+msgstr "Профиль заполнен на"
+
+msgid "Fill in all data to increase score"
+msgstr "Заполните все данные для увеличения балла"
+
+msgid "Scoring not calculated"
+msgstr "Скоринг не рассчитан"
+
+msgid "Fill personal data for calculation"
+msgstr "Заполните персональные данные для расчета"
+
+msgid "Create application"
+msgstr "Создать заявку"
+
+msgid "Fill data"
+msgstr "Заполнить данные"
+
+msgid "Complete data"
+msgstr "Дополнить данные"
+
+# Personal data
+msgid "Fill personal data"
+msgstr "Заполнить личные данные"
+
+msgid "Enter your age"
+msgstr "Введите ваш возраст"
+
+msgid "Age"
+msgstr "Возраст"
+
+msgid "Choose your gender"
+msgstr "Выберите ваш пол"
+
+msgid "Gender"
+msgstr "Пол"
+
+msgid "Male"
+msgstr "Мужской"
+
+msgid "Female"
+msgstr "Женский"
+
+msgid "Choose marital status"
+msgstr "Выберите семейное положение"
+
+msgid "Marital status"
+msgstr "Семейное положение"
+
+msgid "Single"
+msgstr "Холост/Не замужем"
+
+msgid "Married"
+msgstr "Женат/Замужем"
+
+msgid "Divorced"
+msgstr "Разведен(а)"
+
+msgid "Widowed"
+msgstr "Вдовец/Вдова"
+
+msgid "Choose education level"
+msgstr "Выберите уровень образования"
+
+msgid "Education"
+msgstr "Образование"
+
+msgid "Secondary"
+msgstr "Среднее"
+
+msgid "Vocational"
+msgstr "Среднее специальное"
+
+msgid "Incomplete higher"
+msgstr "Неполное высшее"
+
+msgid "Higher"
+msgstr "Высшее"
+
+msgid "Postgraduate"
+msgstr "Послевузовское"
+
+msgid "Choose housing status"
+msgstr "Выберите статус жилья"
+
+msgid "Housing status"
+msgstr "Статус жилья"
+
+msgid "Own"
+msgstr "Собственное"
+
+msgid "Own with mortgage"
+msgstr "Собственное (ипотека)"
+
+msgid "Rent"
+msgstr "Аренда"
+
+msgid "With relatives"
+msgstr "У родственников"
+
+msgid "Choose your region"
+msgstr "Выберите ваш регион"
+
+msgid "Region"
+msgstr "Регион"
+
+msgid "Tashkent"
+msgstr "Ташкент"
+
+msgid "Tashkent region"
+msgstr "Ташкентская область"
+
+msgid "Enter work experience in months"
+msgstr "Введите стаж работы в месяцах"
+
+msgid "Work experience (months)"
+msgstr "Стаж работы (месяцев)"
+
+msgid "Enter years at current address"
+msgstr "Введите количество лет по текущему адресу"
+
+msgid "Years at current address"
+msgstr "Лет по текущему адресу"
+
+msgid "Do you have other loans?"
+msgstr "Есть ли у вас другие кредиты?"
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "No"
+msgstr "Нет"
+
+msgid "Enter monthly payment for other loans"
+msgstr "Введите ежемесячный платеж по другим кредитам"
+
+msgid "Enter number of closed loans"
+msgstr "Введите количество закрытых кредитов"
+
+msgid "Number of closed loans"
+msgstr "Количество закрытых кредитов"
+
+msgid "Personal data saved!"
+msgstr "Личные данные сохранены!"
+
+msgid "Your personal data"
+msgstr "Ваши личные данные"
+
+msgid "years old"
+msgstr "лет"
+
+msgid "Not filled"
+msgstr "Не заполнено"
+
+msgid "Edit"
+msgstr "Изменить"
+
+# Referral
+msgid "Referral Program"
+msgstr "Реферальная программа"
+
+msgid "Your referral code"
+msgstr "Ваш реферальный код"
+
+msgid "Referral link"
+msgstr "Реферальная ссылка"
+
+msgid "Invited users"
+msgstr "Приглашенных пользователей"
+
+msgid "people"
+msgstr "человек"
+
+msgid "Share"
+msgstr "Поделиться"
+
+msgid "Invite friends and get bonuses!"
+msgstr "Приглашайте друзей и получайте бонусы!"
+
+msgid "Your friend registered via your link!"
+msgstr "Ваш друг зарегистрировался по вашей ссылке!"
+
+# Bank flow
+msgid "To send application to bank, fill personal data"
+msgstr "Для отправки заявки в банк заполните личные данные"
+
+msgid "Send application to bank?"
+msgstr "Отправить заявку в банк?"
+
+msgid "Application sent to bank!"
+msgstr "Заявка отправлена в банк!"
+
+msgid "You'll be notified about bank's decision"
+msgstr "Мы уведомим вас о решении банка"
+
+# Errors
+msgid "Incorrect phone number. Try again."
+msgstr "Некорректный номер телефона. Попробуйте еще раз."
+
+msgid "You are not registered. Use /start to begin."
+msgstr "Вы еще не зарегистрированы. Используйте /start для начала."
+
+msgid "Error: user not found"
+msgstr "Ошибка: пользователь не найден"
+
+msgid "Enter correct amount (numbers only)"
+msgstr "Введите корректную сумму (только цифры)"
+
+msgid "Amount must be positive"
+msgstr "Сумма должна быть положительной"
+
+msgid "Maximum amount"
+msgstr "Максимальная сумма"
+
+msgid "Rate must be between"
+msgstr "Ставка должна быть от"
+
+msgid "and"
+msgstr "до"
+
+msgid "Enter correct interest rate"
+msgstr "Введите корректную процентную ставку"
+
+msgid "Term must be from"
+msgstr "Срок должен быть от"
+
+msgid "to"
+msgstr "до"
+
+msgid "Enter number of months (numbers only)"
+msgstr "Введите количество месяцев (только цифры)"
+
+msgid "You must be over 18 years old"
+msgstr "Вы должны быть старше 18 лет"
+
+msgid "Enter correct age"
+msgstr "Введите корректный возраст"
+
+msgid "Enter age (numbers only)"
+msgstr "Введите возраст (только цифры)"
+
+msgid "cannot be negative"
+msgstr "не может быть отрицательным"
+
+msgid "Enter"
+msgstr "Введите"
+
+msgid "(numbers only)"
+msgstr "(только цифры)"
+
+msgid "Action cancelled"
+msgstr "Действие отменено"
+
+msgid "Application creation cancelled"
+msgstr "Создание заявки отменено"
+
+# Settings
+msgid "Language changed successfully"
+msgstr "Язык успешно изменен"
+
+msgid "Current language"
+msgstr "Текущий язык"
+
+msgid "Russian"
+msgstr "Русский"
+
+msgid "Uzbek"
+msgstr "Узбекский"
+
+# DTI Status descriptions
+msgid "Attention! With DTI > 50% banks won't issue a loan."
+msgstr "Внимание! При ПДН > 50% банки не смогут выдать кредит."
+
+# Help
+msgid "Available commands"
+msgstr "Доступные команды"
+
+msgid "Start bot"
+msgstr "Начать работу с ботом"
+
+msgid "Main menu"
+msgstr "Главное меню"
+
+msgid "My application"
+msgstr "Моя заявка"
+
+msgid "My indicators"
+msgstr "Мои показатели"
+
+msgid "Referral program"
+msgstr "Реферальная программа"
+
+msgid "Help"
+msgstr "Помощь"
