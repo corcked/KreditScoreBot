@@ -58,7 +58,7 @@ class Keyboards:
             [InlineKeyboardButton(text=f"💳 {_('New application')}", callback_data="new_loan")],
             [InlineKeyboardButton(text=f"📋 {_('My applications')}", callback_data="my_applications")],
             [InlineKeyboardButton(text=f"📊 {_('My indicators')}", callback_data="my_score")],
-            [InlineKeyboardButton(text=f"👤 {_('Personal data')}", callback_data="personal_data")],
+            [InlineKeyboardButton(text=f"👤 {_('Personal data')}", callback_data="edit_personal_data")],
             [InlineKeyboardButton(text=f"🎁 {_('Referral program')}", callback_data="referral")],
             [InlineKeyboardButton(text=f"⚙️ {_('Settings')}", callback_data="settings")],
         ]
