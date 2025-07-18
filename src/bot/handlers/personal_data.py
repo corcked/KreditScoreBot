@@ -14,8 +14,10 @@ from src.core.enums import (
     HousingStatus,
     MaritalStatus,
     Region,
+    DeviceType,
 )
 from src.core.scoring import PersonalData as PersonalDataSchema, ScoringCalculator
+from src.core.field_protection import FieldProtectionManager
 from src.db.database import get_db_context
 from src.db.models import PersonalData, ReferralRegistration, User
 
@@ -87,6 +89,33 @@ async def process_age(message: types.Message, state: FSMContext, _: callable):
         await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
         return
     
+    data = await state.get_data()
+    
+    # Проверяем, это редактирование отдельного поля или полное заполнение
+    if 'editing_field' in data:
+        # Режим редактирования отдельного поля
+        user_id = data.get('user_id')
+        
+        async with get_db_context() as db:
+            result = await db.execute(
+                select(PersonalData).where(PersonalData.user_id == user_id)
+            )
+            personal_data = result.scalar_one_or_none()
+            
+            if personal_data:
+                personal_data.age = age
+                await db.commit()
+                
+                await message.answer(
+                    f"✅ {_('Age updated successfully!')}\n\n"
+                    f"👤 {_('New age')}: {age}",
+                    reply_markup=Keyboards.back_to_personal_data(_)
+                )
+        
+        await state.clear()
+        return
+    
+    # Полное заполнение данных
     await state.update_data(age=age)
     
     await message.answer(
@@ -100,6 +129,35 @@ async def process_age(message: types.Message, state: FSMContext, _: callable):
 async def process_gender(callback: types.CallbackQuery, state: FSMContext, _: callable):
     """Обработка выбора пола"""
     gender = callback.data.split(":")[1]
+    data = await state.get_data()
+    
+    # Проверяем, это редактирование отдельного поля или полное заполнение
+    if 'editing_field' in data:
+        # Режим редактирования отдельного поля
+        user_id = data.get('user_id')
+        
+        async with get_db_context() as db:
+            result = await db.execute(
+                select(PersonalData).where(PersonalData.user_id == user_id)
+            )
+            personal_data = result.scalar_one_or_none()
+            
+            if personal_data:
+                personal_data.gender = Gender(gender)
+                await db.commit()
+                
+                gender_text = _("Male") if gender == Gender.MALE.value else _("Female")
+                await callback.message.edit_text(
+                    f"✅ {_('Gender updated successfully!')}\n\n"
+                    f"👤 {_('New gender')}: {gender_text}",
+                    reply_markup=Keyboards.back_to_personal_data(_)
+                )
+        
+        await state.clear()
+        await callback.answer()
+        return
+    
+    # Полное заполнение данных
     await state.update_data(gender=gender)
     
     await callback.message.edit_text(
@@ -111,118 +169,289 @@ async def process_gender(callback: types.CallbackQuery, state: FSMContext, _: ca
 
 
 @router.message(PersonalDataStates.entering_work_experience)
-async def process_work_experience(message: types.Message, state: FSMContext):
+async def process_work_experience(message: types.Message, state: FSMContext, _: callable):
     """Обработка стажа работы"""
     valid, months, error = validate_positive_number(message.text, "Стаж")
     
     if not valid:
-        await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button())
+        await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
         return
     
+    data = await state.get_data()
+    
+    # Проверяем, это редактирование отдельного поля или полное заполнение
+    if 'editing_field' in data:
+        # Режим редактирования отдельного поля
+        user_id = data.get('user_id')
+        
+        async with get_db_context() as db:
+            result = await db.execute(
+                select(PersonalData).where(PersonalData.user_id == user_id)
+            )
+            personal_data = result.scalar_one_or_none()
+            
+            if personal_data:
+                personal_data.work_experience_months = months
+                await db.commit()
+                
+                await message.answer(
+                    f"✅ {_('Work experience updated successfully!')}\n\n"
+                    f"💼 {_('New experience')}: {months} {_('months')}",
+                    reply_markup=Keyboards.back_to_personal_data(_)
+                )
+        
+        await state.clear()
+        return
+    
+    # Полное заполнение данных
     await state.update_data(work_experience_months=months)
     
     await message.answer(
         "Сколько лет вы проживаете по текущему адресу?",
-        reply_markup=Keyboards.cancel_button()
+        reply_markup=Keyboards.cancel_button(_)
     )
     await state.set_state(PersonalDataStates.entering_address_stability)
 
 
 @router.message(PersonalDataStates.entering_address_stability)
-async def process_address_stability(message: types.Message, state: FSMContext):
+async def process_address_stability(message: types.Message, state: FSMContext, _: callable):
     """Обработка стабильности адреса"""
     valid, years, error = validate_positive_number(message.text, "Количество лет")
     
     if not valid:
-        await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button())
+        await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
         return
     
+    data = await state.get_data()
+    
+    # Проверяем, это редактирование отдельного поля или полное заполнение
+    if 'editing_field' in data:
+        # Режим редактирования отдельного поля
+        user_id = data.get('user_id')
+        
+        async with get_db_context() as db:
+            result = await db.execute(
+                select(PersonalData).where(PersonalData.user_id == user_id)
+            )
+            personal_data = result.scalar_one_or_none()
+            
+            if personal_data:
+                personal_data.address_stability_years = years
+                await db.commit()
+                
+                await message.answer(
+                    f"✅ {_('Address stability updated successfully!')}\n\n"
+                    f"🏠 {_('Years at current address')}: {years}",
+                    reply_markup=Keyboards.back_to_personal_data(_)
+                )
+        
+        await state.clear()
+        return
+    
+    # Полное заполнение данных
     await state.update_data(address_stability_years=years)
     
     await message.answer(
         "Укажите ваш статус жилья:",
-        reply_markup=Keyboards.housing_status_choice()
+        reply_markup=Keyboards.housing_status_choice(_)
     )
     await state.set_state(PersonalDataStates.choosing_housing_status)
 
 
 @router.callback_query(PersonalDataStates.choosing_housing_status, F.data.startswith("house:"))
-async def process_housing_status(callback: types.CallbackQuery, state: FSMContext):
+async def process_housing_status(callback: types.CallbackQuery, state: FSMContext, _: callable):
     """Обработка статуса жилья"""
     housing = callback.data.split(":")[1]
+    data = await state.get_data()
+    
+    # Проверяем, это редактирование отдельного поля или полное заполнение
+    if 'editing_field' in data:
+        # Режим редактирования отдельного поля
+        user_id = data.get('user_id')
+        
+        async with get_db_context() as db:
+            result = await db.execute(
+                select(PersonalData).where(PersonalData.user_id == user_id)
+            )
+            personal_data = result.scalar_one_or_none()
+            
+            if personal_data:
+                personal_data.housing_status = HousingStatus(housing)
+                await db.commit()
+                
+                # Форматируем статус жилья
+                housing_text = format_field_value(HousingStatus(housing), 'housing_status', _)
+                await callback.message.edit_text(
+                    f"✅ {_('Housing status updated successfully!')}\n\n"
+                    f"🏠 {_('New status')}: {housing_text}",
+                    reply_markup=Keyboards.back_to_personal_data(_)
+                )
+        
+        await state.clear()
+        await callback.answer()
+        return
+    
+    # Полное заполнение данных
     await state.update_data(housing_status=housing)
     
     await callback.message.edit_text(
         "Укажите ваше семейное положение:",
-        reply_markup=Keyboards.marital_status_choice()
+        reply_markup=Keyboards.marital_status_choice(_)
     )
     await state.set_state(PersonalDataStates.choosing_marital_status)
     await callback.answer()
 
 
 @router.callback_query(PersonalDataStates.choosing_marital_status, F.data.startswith("marital:"))
-async def process_marital_status(callback: types.CallbackQuery, state: FSMContext):
+async def process_marital_status(callback: types.CallbackQuery, state: FSMContext, _: callable):
     """Обработка семейного положения"""
     marital = callback.data.split(":")[1]
+    data = await state.get_data()
+    
+    # Проверяем, это редактирование отдельного поля или полное заполнение
+    if 'editing_field' in data:
+        # Режим редактирования отдельного поля
+        user_id = data.get('user_id')
+        
+        async with get_db_context() as db:
+            result = await db.execute(
+                select(PersonalData).where(PersonalData.user_id == user_id)
+            )
+            personal_data = result.scalar_one_or_none()
+            
+            if personal_data:
+                personal_data.marital_status = MaritalStatus(marital)
+                await db.commit()
+                
+                # Форматируем семейное положение
+                marital_text = format_field_value(MaritalStatus(marital), 'marital_status', _)
+                await callback.message.edit_text(
+                    f"✅ {_('Marital status updated successfully!')}\n\n"
+                    f"💑 {_('New status')}: {marital_text}",
+                    reply_markup=Keyboards.back_to_personal_data(_)
+                )
+        
+        await state.clear()
+        await callback.answer()
+        return
+    
+    # Полное заполнение данных
     await state.update_data(marital_status=marital)
     
     await callback.message.edit_text(
         "Укажите ваш уровень образования:",
-        reply_markup=Keyboards.education_choice()
+        reply_markup=Keyboards.education_choice(_)
     )
     await state.set_state(PersonalDataStates.choosing_education)
     await callback.answer()
 
 
 @router.callback_query(PersonalDataStates.choosing_education, F.data.startswith("edu:"))
-async def process_education(callback: types.CallbackQuery, state: FSMContext):
+async def process_education(callback: types.CallbackQuery, state: FSMContext, _: callable):
     """Обработка образования"""
     education = callback.data.split(":")[1]
+    data = await state.get_data()
+    
+    # Проверяем, это редактирование отдельного поля или полное заполнение
+    if 'editing_field' in data:
+        # Режим редактирования отдельного поля
+        user_id = data.get('user_id')
+        
+        async with get_db_context() as db:
+            result = await db.execute(
+                select(PersonalData).where(PersonalData.user_id == user_id)
+            )
+            personal_data = result.scalar_one_or_none()
+            
+            if personal_data:
+                personal_data.education = Education(education)
+                await db.commit()
+                
+                # Форматируем образование
+                education_text = format_field_value(Education(education), 'education', _)
+                await callback.message.edit_text(
+                    f"✅ {_('Education updated successfully!')}\n\n"
+                    f"🎓 {_('New education')}: {education_text}",
+                    reply_markup=Keyboards.back_to_personal_data(_)
+                )
+        
+        await state.clear()
+        await callback.answer()
+        return
+    
+    # Полное заполнение данных
     await state.update_data(education=education)
     
     await callback.message.edit_text(
         "Сколько кредитов вы успешно закрыли?\n"
         "(введите 0, если не было кредитов)",
-        reply_markup=Keyboards.cancel_button()
+        reply_markup=Keyboards.cancel_button(_)
     )
     await state.set_state(PersonalDataStates.entering_closed_loans)
     await callback.answer()
 
 
 @router.message(PersonalDataStates.entering_closed_loans)
-async def process_closed_loans(message: types.Message, state: FSMContext):
+async def process_closed_loans(message: types.Message, state: FSMContext, _: callable):
     """Обработка количества закрытых кредитов"""
     valid, count, error = validate_positive_number(message.text, "Количество кредитов")
     
     if not valid:
-        await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button())
+        await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
         return
     
+    data = await state.get_data()
+    
+    # Проверяем, это редактирование отдельного поля или полное заполнение
+    if 'editing_field' in data:
+        # Режим редактирования отдельного поля
+        user_id = data.get('user_id')
+        
+        async with get_db_context() as db:
+            result = await db.execute(
+                select(PersonalData).where(PersonalData.user_id == user_id)
+            )
+            personal_data = result.scalar_one_or_none()
+            
+            if personal_data:
+                personal_data.closed_loans_count = count
+                await db.commit()
+                
+                await message.answer(
+                    f"✅ {_('Closed loans count updated successfully!')}\n\n"
+                    f"🏦 {_('Closed loans')}: {count}",
+                    reply_markup=Keyboards.back_to_personal_data(_)
+                )
+        
+        await state.clear()
+        return
+    
+    # Полное заполнение данных
     await state.update_data(closed_loans_count=count)
     
     await message.answer(
         "В каком регионе вы проживаете?",
-        reply_markup=Keyboards.region_choice()
+        reply_markup=Keyboards.region_choice(_)
     )
     await state.set_state(PersonalDataStates.choosing_region)
 
 
 @router.callback_query(PersonalDataStates.choosing_region, F.data == "region_more")
-async def show_more_regions(callback: types.CallbackQuery):
+async def show_more_regions(callback: types.CallbackQuery, _: callable):
     """Показать дополнительные регионы"""
-    await callback.message.edit_reply_markup(reply_markup=Keyboards.region_choice_more())
+    await callback.message.edit_reply_markup(reply_markup=Keyboards.region_choice_more(_))
     await callback.answer()
 
 
 @router.callback_query(PersonalDataStates.choosing_region, F.data == "region_back")
-async def show_less_regions(callback: types.CallbackQuery):
+async def show_less_regions(callback: types.CallbackQuery, _: callable):
     """Вернуться к первой части регионов"""
-    await callback.message.edit_reply_markup(reply_markup=Keyboards.region_choice())
+    await callback.message.edit_reply_markup(reply_markup=Keyboards.region_choice(_))
     await callback.answer()
 
 
 @router.callback_query(PersonalDataStates.choosing_region, F.data.startswith("region:"))
-async def process_region(callback: types.CallbackQuery, state: FSMContext):
+async def process_region(callback: types.CallbackQuery, state: FSMContext, _: callable):
     """Обработка выбора региона"""
     region = callback.data.split(":")[1]
     await state.update_data(region=region)
@@ -230,6 +459,34 @@ async def process_region(callback: types.CallbackQuery, state: FSMContext):
     # Сохраняем все данные
     data = await state.get_data()
     
+    # Проверяем, это редактирование отдельного поля или полное заполнение
+    if 'editing_field' in data:
+        # Это редактирование отдельного поля региона
+        user_id = data.get('user_id')
+        
+        async with get_db_context() as db:
+            result = await db.execute(
+                select(PersonalData).where(PersonalData.user_id == user_id)
+            )
+            personal_data = result.scalar_one_or_none()
+            
+            if personal_data:
+                personal_data.region = Region(region)
+                await db.commit()
+                
+                # Форматируем название региона
+                region_name = region.replace('_', ' ').title()
+                await callback.message.edit_text(
+                    f"✅ {_('Region updated successfully!')}\n\n"
+                    f"📍 {_('New region')}: {region_name}",
+                    reply_markup=Keyboards.back_to_personal_data(_)
+                )
+        
+        await state.clear()
+        await callback.answer()
+        return
+    
+    # Это полное заполнение данных - продолжаем как раньше
     async with get_db_context() as db:
         # Обновляем персональные данные
         result = await db.execute(
@@ -300,9 +557,494 @@ async def process_region(callback: types.CallbackQuery, state: FSMContext):
             
             await callback.message.edit_text(
                 message,
-                reply_markup=Keyboards.main_menu(),
+                reply_markup=Keyboards.main_menu(_),
                 parse_mode="Markdown"
             )
     
     await state.clear()
     await callback.answer("Данные сохранены!")
+
+
+@router.callback_query(F.data == "edit_personal_data")
+async def show_personal_data_menu(callback: types.CallbackQuery, _: callable):
+    """Показать меню редактирования персональных данных"""
+    user_id = callback.from_user.id
+    
+    async with get_db_context() as db:
+        # Получаем пользователя
+        result = await db.execute(
+            select(User).where(User.telegram_id == user_id)
+        )
+        user = result.scalar_one_or_none()
+        
+        if not user:
+            await callback.message.edit_text(
+                f"❌ {_('User not found')}",
+                reply_markup=Keyboards.back_to_menu(_)
+            )
+            return
+        
+        # Получаем персональные данные пользователя
+        result = await db.execute(
+            select(PersonalData).where(PersonalData.user_id == user.id)
+        )
+        personal_data = result.scalar_one_or_none()
+        
+        if not personal_data:
+            await callback.message.edit_text(
+                f"❌ {_('Personal data not found')}",
+                reply_markup=Keyboards.back_to_menu(_)
+            )
+            return
+        
+        # Получаем статус полей
+        field_status = FieldProtectionManager.get_field_status(personal_data)
+        
+        # Показываем меню с учетом защищенных полей
+        await show_data_menu_with_protection(callback, field_status, personal_data, _)
+
+
+async def show_data_menu_with_protection(
+    callback: types.CallbackQuery, 
+    field_status: dict, 
+    personal_data: PersonalData,
+    _: callable
+):
+    """Показать меню данных с учетом защиты полей"""
+    
+    message = f"👤 **{_('Personal Data')}**\n\n"
+    
+    # Разделяем поля на группы
+    protected_fields = []
+    editable_fields = []
+    filled_fields = []
+    
+    for field_name, status in field_status.items():
+        if status['is_protected']:
+            protected_fields.append((field_name, status))
+        elif status['is_filled']:
+            filled_fields.append((field_name, status))
+        else:
+            editable_fields.append((field_name, status))
+    
+    # Показываем заполненные данные
+    if filled_fields or protected_fields:
+        message += f"📋 **{_('Current Data')}:**\n"
+        
+        for field_name, status in filled_fields + protected_fields:
+            value = format_field_value(status['current_value'], field_name, _)
+            icon = "🔒" if status['is_protected'] else "✅"
+            message += f"{icon} {_(status['display_name'])}: {value}\n"
+    
+    # Показываем доступные для редактирования
+    if editable_fields:
+        message += f"\n✏️ **{_('Available for editing')}:**\n"
+        for field_name, status in editable_fields:
+            if not status['is_filled']:
+                message += f"📝 {_(status['display_name'])}: {_('Not filled')}\n"
+    
+    # Информация о защищенных полях
+    if protected_fields:
+        message += f"\n🔒 **{_('Protected fields')}:** {len(protected_fields)}\n"
+        message += f"💡 {_('These fields cannot be changed as they affect your credit score')}\n"
+    
+    # Добавляем информацию о текущем скоринге
+    if personal_data.current_score:
+        message += f"\n📊 **{_('Current score')}:** {personal_data.current_score} {_('points')}\n"
+    
+    await callback.message.edit_text(
+        message,
+        reply_markup=Keyboards.personal_data_menu_protected(field_status, _),
+        parse_mode="Markdown"
+    )
+
+
+def format_field_value(value: any, field_name: str, _: callable) -> str:
+    """Форматирует значение поля для отображения"""
+    if value is None:
+        return _("Not filled")
+    
+    # Специальное форматирование для разных типов полей
+    if field_name == 'gender':
+        return _("Male") if value == Gender.MALE else _("Female")
+    elif field_name == 'monthly_income':
+        return f"{value:,.0f} {_('som')}".replace(",", " ")
+    elif field_name == 'has_other_loans':
+        return _("Yes") if value else _("No")
+    elif field_name in ['work_experience_months', 'address_stability_years']:
+        if field_name == 'work_experience_months':
+            return f"{value} {_('months')}"
+        else:
+            return f"{value} {_('years')}"
+    elif field_name == 'housing_status':
+        housing_map = {
+            HousingStatus.OWN: _("Own property"),
+            HousingStatus.OWN_WITH_MORTGAGE: _("Own with mortgage"),
+            HousingStatus.RENT: _("Rent"),
+            HousingStatus.RELATIVES: _("With relatives")
+        }
+        return housing_map.get(value, str(value))
+    elif field_name == 'marital_status':
+        marital_map = {
+            MaritalStatus.SINGLE: _("Single"),
+            MaritalStatus.MARRIED: _("Married"),
+            MaritalStatus.DIVORCED: _("Divorced"),
+            MaritalStatus.WIDOWED: _("Widowed")
+        }
+        return marital_map.get(value, str(value))
+    elif field_name == 'education':
+        education_map = {
+            Education.SECONDARY: _("Secondary"),
+            Education.VOCATIONAL: _("Vocational"),
+            Education.INCOMPLETE_HIGHER: _("Incomplete higher"),
+            Education.HIGHER: _("Higher"),
+            Education.POSTGRADUATE: _("Postgraduate")
+        }
+        return education_map.get(value, str(value))
+    elif field_name == 'region':
+        # Для региона просто возвращаем значение enum
+        return str(value.value).replace('_', ' ')
+    elif field_name == 'device_type':
+        device_map = {
+            DeviceType.APPLE: _("Apple"),
+            DeviceType.ANDROID: _("Android"),
+            DeviceType.OTHER: _("Other")
+        }
+        return device_map.get(value, str(value))
+    
+    return str(value)
+
+
+@router.callback_query(F.data == "explain_protection")
+async def explain_field_protection(callback: types.CallbackQuery, _: callable):
+    """Объяснить систему защиты полей"""
+    
+    message = f"🔒 **{_('Field Protection System')}**\n\n"
+    
+    message += f"**{_('Why are some fields protected?')}**\n"
+    message += f"• {_('Filled fields affect your credit score')}\n"
+    message += f"• {_('This prevents score manipulation')}\n"
+    message += f"• {_('Ensures assessment reliability')}\n\n"
+    
+    message += f"**{_('What you can always edit:')}**\n"
+    message += f"💰 {_('Monthly income')}\n"
+    message += f"🏦 {_('Information about other loans')}\n\n"
+    
+    message += f"**{_('What gets protected:')}**\n"
+    message += f"👤 {_('Personal information (age, gender)')}\n"
+    message += f"🏠 {_('Housing and family status')}\n"
+    message += f"🎓 {_('Education and work experience')}\n"
+    message += f"📍 {_('Location and device type')}\n\n"
+    
+    message += f"💡 {_('Tip: Fill all fields carefully before first scoring calculation!')}"
+    
+    await callback.message.edit_text(
+        message,
+        reply_markup=Keyboards.back_to_personal_data(_),
+        parse_mode="Markdown"
+    )
+
+
+@router.callback_query(F.data == "view_protected_data")
+async def view_protected_data(callback: types.CallbackQuery, _: callable):
+    """Показать защищенные данные"""
+    user_id = callback.from_user.id
+    
+    async with get_db_context() as db:
+        # Получаем пользователя
+        result = await db.execute(
+            select(User).where(User.telegram_id == user_id)
+        )
+        user = result.scalar_one_or_none()
+        
+        if not user:
+            await callback.answer(_("User not found"))
+            return
+        
+        result = await db.execute(
+            select(PersonalData).where(PersonalData.user_id == user.id)
+        )
+        personal_data = result.scalar_one_or_none()
+        
+        if not personal_data:
+            await callback.answer(_("Data not found"))
+            return
+        
+        field_status = FieldProtectionManager.get_field_status(personal_data)
+        protected_fields = [
+            (name, status) for name, status in field_status.items() 
+            if status['is_protected']
+        ]
+        
+        if not protected_fields:
+            await callback.answer(_("No protected fields"))
+            return
+        
+        message = f"🔒 **{_('Protected Data')}**\n\n"
+        message += f"{_('These fields cannot be changed:')}\n\n"
+        
+        for field_name, status in protected_fields:
+            value = format_field_value(status['current_value'], field_name, _)
+            message += f"🔒 **{_(status['display_name'])}**: {value}\n"
+        
+        message += f"\n💡 {_('These fields are locked because they affect your credit score.')}"
+        
+        await callback.message.edit_text(
+            message,
+            reply_markup=Keyboards.back_to_personal_data(_),
+            parse_mode="Markdown"
+        )
+
+
+@router.callback_query(F.data == "edit_available_fields")
+async def show_editable_fields_menu(callback: types.CallbackQuery, _: callable):
+    """Показать меню редактируемых полей"""
+    user_id = callback.from_user.id
+    
+    async with get_db_context() as db:
+        # Получаем пользователя
+        result = await db.execute(
+            select(User).where(User.telegram_id == user_id)
+        )
+        user = result.scalar_one_or_none()
+        
+        if not user:
+            await callback.answer(_("User not found"))
+            return
+        
+        result = await db.execute(
+            select(PersonalData).where(PersonalData.user_id == user.id)
+        )
+        personal_data = result.scalar_one_or_none()
+        
+        if not personal_data:
+            await callback.answer(_("Data not found"))
+            return
+        
+        field_status = FieldProtectionManager.get_field_status(personal_data)
+        
+        message = f"✏️ **{_('Edit available fields')}**\n\n"
+        message += f"{_('Select a field to edit:')}\n"
+        
+        await callback.message.edit_text(
+            message,
+            reply_markup=Keyboards.editable_fields_menu(field_status, _),
+            parse_mode="Markdown"
+        )
+
+
+@router.callback_query(F.data.startswith("edit_field:"))
+async def handle_field_edit_attempt(callback: types.CallbackQuery, state: FSMContext, _: callable):
+    """Обработка попытки редактирования поля"""
+    field_name = callback.data.split(":")[1]
+    user_id = callback.from_user.id
+    
+    async with get_db_context() as db:
+        # Получаем пользователя
+        result = await db.execute(
+            select(User).where(User.telegram_id == user_id)
+        )
+        user = result.scalar_one_or_none()
+        
+        if not user:
+            await callback.answer(_("User not found"))
+            return
+        
+        result = await db.execute(
+            select(PersonalData).where(PersonalData.user_id == user.id)
+        )
+        personal_data = result.scalar_one_or_none()
+        
+        if not personal_data:
+            await callback.answer(_("Data not found"))
+            return
+        
+        # Проверяем, защищено ли поле
+        if FieldProtectionManager.is_field_protected(personal_data, field_name):
+            # Показываем сообщение о защите
+            reason = FieldProtectionManager.get_protection_reason(field_name, _)
+            await callback.answer(
+                f"🔒 {reason}",
+                show_alert=True
+            )
+            return
+        
+        # Если поле не защищено, продолжаем редактирование
+        await start_field_editing(callback, field_name, personal_data, state, _)
+
+
+async def start_field_editing(callback: types.CallbackQuery, field_name: str, personal_data: PersonalData, state: FSMContext, _: callable):
+    """Начать редактирование конкретного поля"""
+    await state.update_data(
+        editing_field=field_name,
+        user_id=personal_data.user_id
+    )
+    
+    # Определяем какое состояние установить и какое сообщение показать
+    field_handlers = {
+        'age': (PersonalDataStates.entering_age, _('Enter your age')),
+        'work_experience_months': (PersonalDataStates.entering_work_experience, _('Enter work experience in months')),
+        'address_stability_years': (PersonalDataStates.entering_address_stability, _('How many years have you lived at your current address?')),
+        'closed_loans_count': (PersonalDataStates.entering_closed_loans, _('How many loans have you successfully closed?\n(enter 0 if none)')),
+        'monthly_income': (PersonalDataStates.entering_income, _('Enter your monthly income')),
+        'other_loans_monthly_payment': (PersonalDataStates.entering_other_loans_payment, _('Enter monthly payment for other loans'))
+    }
+    
+    if field_name in field_handlers:
+        state_to_set, message = field_handlers[field_name]
+        await state.set_state(state_to_set)
+        await callback.message.edit_text(
+            message,
+            reply_markup=Keyboards.cancel_button(_)
+        )
+    elif field_name == 'gender':
+        await state.set_state(PersonalDataStates.choosing_gender)
+        await callback.message.edit_text(
+            _('Choose your gender'),
+            reply_markup=Keyboards.gender_choice(_)
+        )
+    elif field_name == 'housing_status':
+        await state.set_state(PersonalDataStates.choosing_housing_status)
+        await callback.message.edit_text(
+            _('Specify your housing status:'),
+            reply_markup=Keyboards.housing_status_choice(_)
+        )
+    elif field_name == 'marital_status':
+        await state.set_state(PersonalDataStates.choosing_marital_status)
+        await callback.message.edit_text(
+            _('Specify your marital status:'),
+            reply_markup=Keyboards.marital_status_choice(_)
+        )
+    elif field_name == 'education':
+        await state.set_state(PersonalDataStates.choosing_education)
+        await callback.message.edit_text(
+            _('Specify your education level:'),
+            reply_markup=Keyboards.education_choice(_)
+        )
+    elif field_name == 'region':
+        await state.set_state(PersonalDataStates.choosing_region)
+        await callback.message.edit_text(
+            _('In which region do you live?'),
+            reply_markup=Keyboards.region_choice(_)
+        )
+    elif field_name == 'has_other_loans':
+        await state.set_state(PersonalDataStates.choosing_has_loans)
+        await callback.message.edit_text(
+            _('Do you have other loans?'),
+            reply_markup=Keyboards.yes_no_choice(_, "has_loans")
+        )
+    else:
+        await callback.answer(_("This field cannot be edited"), show_alert=True)
+        return
+    
+    await callback.answer()
+
+
+
+@router.message(PersonalDataStates.entering_income)
+async def process_income_edit(message: types.Message, state: FSMContext, _: callable):
+    """Обработка редактирования дохода"""
+    valid, amount, error = validate_positive_number(message.text, _("Income"))
+    
+    if not valid:
+        await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
+        return
+    
+    data = await state.get_data()
+    user_id = data.get('user_id')
+    
+    async with get_db_context() as db:
+        result = await db.execute(
+            select(PersonalData).where(PersonalData.user_id == user_id)
+        )
+        personal_data = result.scalar_one_or_none()
+        
+        if personal_data:
+            personal_data.monthly_income = amount
+            await db.commit()
+            
+            await message.answer(
+                f"✅ {_('Income updated successfully!')}\n\n"
+                f"💰 {_('New income')}: {amount:,.0f} {_('som')}".replace(",", " "),
+                reply_markup=Keyboards.back_to_personal_data(_)
+            )
+    
+    await state.clear()
+
+
+@router.message(PersonalDataStates.entering_other_loans_payment)
+async def process_other_loans_payment_edit(message: types.Message, state: FSMContext, _: callable):
+    """Обработка редактирования платежей по другим кредитам"""
+    valid, amount, error = validate_positive_number(message.text, _("Payment amount"))
+    
+    if not valid:
+        await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
+        return
+    
+    data = await state.get_data()
+    user_id = data.get('user_id')
+    
+    async with get_db_context() as db:
+        result = await db.execute(
+            select(PersonalData).where(PersonalData.user_id == user_id)
+        )
+        personal_data = result.scalar_one_or_none()
+        
+        if personal_data:
+            personal_data.other_loans_monthly_payment = amount
+            await db.commit()
+            
+            await message.answer(
+                f"✅ {_('Other loans payment updated successfully!')}\n\n"
+                f"💳 {_('New payment amount')}: {amount:,.0f} {_('som')}".replace(",", " "),
+                reply_markup=Keyboards.back_to_personal_data(_)
+            )
+    
+    await state.clear()
+
+
+@router.callback_query(PersonalDataStates.choosing_has_loans, F.data.in_(["has_loans:yes", "has_loans:no"]))
+async def process_has_loans_edit(callback: types.CallbackQuery, state: FSMContext, _: callable):
+    """Обработка редактирования наличия других кредитов"""
+    has_loans = callback.data.split(":")[1] == "yes"
+    
+    data = await state.get_data()
+    user_id = data.get('user_id')
+    
+    async with get_db_context() as db:
+        result = await db.execute(
+            select(PersonalData).where(PersonalData.user_id == user_id)
+        )
+        personal_data = result.scalar_one_or_none()
+        
+        if personal_data:
+            personal_data.has_other_loans = has_loans
+            
+            # Если кредитов нет, обнуляем платежи
+            if not has_loans:
+                personal_data.other_loans_monthly_payment = 0
+            
+            await db.commit()
+            
+            status = _("Yes") if has_loans else _("No")
+            await callback.message.edit_text(
+                f"✅ {_('Loan status updated successfully!')}\n\n"
+                f"🏦 {_('Other loans')}: {status}",
+                reply_markup=Keyboards.back_to_personal_data(_)
+            )
+    
+    await state.clear()
+    await callback.answer()
+
+
+
+
+@router.callback_query(F.data == "cancel")
+async def cancel_editing(callback: types.CallbackQuery, state: FSMContext, _: callable):
+    """Отмена редактирования"""
+    await state.clear()
+    await callback.message.edit_text(
+        f"❌ {_('Editing cancelled')}",
+        reply_markup=Keyboards.main_menu(_)
+    )
+    await callback.answer()

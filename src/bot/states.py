@@ -39,6 +39,11 @@ class PersonalDataStates(StatesGroup):
     entering_closed_loans = State()
     choosing_region = State()
     
+    # Дополнительные состояния для редактирования
+    entering_income = State()
+    entering_other_loans_payment = State()
+    choosing_has_loans = State()
+    
     # Итоговое состояние
     reviewing_data = State()
 
