@@ -440,7 +440,7 @@ def format_field_value(value: any, field_name: str, _: callable) -> str:
     elif field_name == 'education':
         education_map = {
             Education.SECONDARY: _("Secondary"),
-            Education.SPECIALIZED_SECONDARY: _("Specialized secondary"),
+            Education.VOCATIONAL: _("Vocational"),
             Education.INCOMPLETE_HIGHER: _("Incomplete higher"),
             Education.HIGHER: _("Higher"),
             Education.POSTGRADUATE: _("Postgraduate")
