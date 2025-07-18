@@ -598,7 +598,7 @@ async def show_personal_data_menu(callback: types.CallbackQuery, _: callable):
             return
         
         # Получаем статус полей
-        field_status = FieldProtectionManager.get_field_status(personal_data)
+        field_status = FieldProtectionManager.get_field_status(personal_data, _)
         
         # Показываем меню с учетом защищенных полей
         await show_data_menu_with_protection(callback, field_status, personal_data, _)
@@ -770,7 +770,7 @@ async def view_protected_data(callback: types.CallbackQuery, _: callable):
             await callback.answer(_("Data not found"))
             return
         
-        field_status = FieldProtectionManager.get_field_status(personal_data)
+        field_status = FieldProtectionManager.get_field_status(personal_data, _)
         protected_fields = [
             (name, status) for name, status in field_status.items() 
             if status['is_protected']
@@ -821,7 +821,7 @@ async def show_editable_fields_menu(callback: types.CallbackQuery, _: callable):
             await callback.answer(_("Data not found"))
             return
         
-        field_status = FieldProtectionManager.get_field_status(personal_data)
+        field_status = FieldProtectionManager.get_field_status(personal_data, _)
         
         message = f"✏️ **{_('Edit available fields')}**\n\n"
         message += f"{_('Select a field to edit:')}\n"
