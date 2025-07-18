@@ -89,6 +89,33 @@ async def process_age(message: types.Message, state: FSMContext, _: callable):
         await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
         return
     
+    data = await state.get_data()
+    
+    # Проверяем, это редактирование отдельного поля или полное заполнение
+    if 'editing_field' in data:
+        # Режим редактирования отдельного поля
+        user_id = data.get('user_id')
+        
+        async with get_db_context() as db:
+            result = await db.execute(
+                select(PersonalData).where(PersonalData.user_id == user_id)
+            )
+            personal_data = result.scalar_one_or_none()
+            
+            if personal_data:
+                personal_data.age = age
+                await db.commit()
+                
+                await message.answer(
+                    f"✅ {_('Age updated successfully!')}\n\n"
+                    f"👤 {_('New age')}: {age}",
+                    reply_markup=Keyboards.back_to_personal_data(_)
+                )
+        
+        await state.clear()
+        return
+    
+    # Полное заполнение данных
     await state.update_data(age=age)
     
     await message.answer(
@@ -102,6 +129,35 @@ async def process_age(message: types.Message, state: FSMContext, _: callable):
 async def process_gender(callback: types.CallbackQuery, state: FSMContext, _: callable):
     """Обработка выбора пола"""
     gender = callback.data.split(":")[1]
+    data = await state.get_data()
+    
+    # Проверяем, это редактирование отдельного поля или полное заполнение
+    if 'editing_field' in data:
+        # Режим редактирования отдельного поля
+        user_id = data.get('user_id')
+        
+        async with get_db_context() as db:
+            result = await db.execute(
+                select(PersonalData).where(PersonalData.user_id == user_id)
+            )
+            personal_data = result.scalar_one_or_none()
+            
+            if personal_data:
+                personal_data.gender = Gender(gender)
+                await db.commit()
+                
+                gender_text = _("Male") if gender == Gender.MALE.value else _("Female")
+                await callback.message.edit_text(
+                    f"✅ {_('Gender updated successfully!')}\n\n"
+                    f"👤 {_('New gender')}: {gender_text}",
+                    reply_markup=Keyboards.back_to_personal_data(_)
+                )
+        
+        await state.clear()
+        await callback.answer()
+        return
+    
+    # Полное заполнение данных
     await state.update_data(gender=gender)
     
     await callback.message.edit_text(
@@ -121,6 +177,33 @@ async def process_work_experience(message: types.Message, state: FSMContext, _: 
         await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
         return
     
+    data = await state.get_data()
+    
+    # Проверяем, это редактирование отдельного поля или полное заполнение
+    if 'editing_field' in data:
+        # Режим редактирования отдельного поля
+        user_id = data.get('user_id')
+        
+        async with get_db_context() as db:
+            result = await db.execute(
+                select(PersonalData).where(PersonalData.user_id == user_id)
+            )
+            personal_data = result.scalar_one_or_none()
+            
+            if personal_data:
+                personal_data.work_experience_months = months
+                await db.commit()
+                
+                await message.answer(
+                    f"✅ {_('Work experience updated successfully!')}\n\n"
+                    f"💼 {_('New experience')}: {months} {_('months')}",
+                    reply_markup=Keyboards.back_to_personal_data(_)
+                )
+        
+        await state.clear()
+        return
+    
+    # Полное заполнение данных
     await state.update_data(work_experience_months=months)
     
     await message.answer(
@@ -139,6 +222,33 @@ async def process_address_stability(message: types.Message, state: FSMContext, _
         await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
         return
     
+    data = await state.get_data()
+    
+    # Проверяем, это редактирование отдельного поля или полное заполнение
+    if 'editing_field' in data:
+        # Режим редактирования отдельного поля
+        user_id = data.get('user_id')
+        
+        async with get_db_context() as db:
+            result = await db.execute(
+                select(PersonalData).where(PersonalData.user_id == user_id)
+            )
+            personal_data = result.scalar_one_or_none()
+            
+            if personal_data:
+                personal_data.address_stability_years = years
+                await db.commit()
+                
+                await message.answer(
+                    f"✅ {_('Address stability updated successfully!')}\n\n"
+                    f"🏠 {_('Years at current address')}: {years}",
+                    reply_markup=Keyboards.back_to_personal_data(_)
+                )
+        
+        await state.clear()
+        return
+    
+    # Полное заполнение данных
     await state.update_data(address_stability_years=years)
     
     await message.answer(
@@ -152,6 +262,36 @@ async def process_address_stability(message: types.Message, state: FSMContext, _
 async def process_housing_status(callback: types.CallbackQuery, state: FSMContext, _: callable):
     """Обработка статуса жилья"""
     housing = callback.data.split(":")[1]
+    data = await state.get_data()
+    
+    # Проверяем, это редактирование отдельного поля или полное заполнение
+    if 'editing_field' in data:
+        # Режим редактирования отдельного поля
+        user_id = data.get('user_id')
+        
+        async with get_db_context() as db:
+            result = await db.execute(
+                select(PersonalData).where(PersonalData.user_id == user_id)
+            )
+            personal_data = result.scalar_one_or_none()
+            
+            if personal_data:
+                personal_data.housing_status = HousingStatus(housing)
+                await db.commit()
+                
+                # Форматируем статус жилья
+                housing_text = format_field_value(HousingStatus(housing), 'housing_status', _)
+                await callback.message.edit_text(
+                    f"✅ {_('Housing status updated successfully!')}\n\n"
+                    f"🏠 {_('New status')}: {housing_text}",
+                    reply_markup=Keyboards.back_to_personal_data(_)
+                )
+        
+        await state.clear()
+        await callback.answer()
+        return
+    
+    # Полное заполнение данных
     await state.update_data(housing_status=housing)
     
     await callback.message.edit_text(
@@ -166,6 +306,36 @@ async def process_housing_status(callback: types.CallbackQuery, state: FSMContex
 async def process_marital_status(callback: types.CallbackQuery, state: FSMContext, _: callable):
     """Обработка семейного положения"""
     marital = callback.data.split(":")[1]
+    data = await state.get_data()
+    
+    # Проверяем, это редактирование отдельного поля или полное заполнение
+    if 'editing_field' in data:
+        # Режим редактирования отдельного поля
+        user_id = data.get('user_id')
+        
+        async with get_db_context() as db:
+            result = await db.execute(
+                select(PersonalData).where(PersonalData.user_id == user_id)
+            )
+            personal_data = result.scalar_one_or_none()
+            
+            if personal_data:
+                personal_data.marital_status = MaritalStatus(marital)
+                await db.commit()
+                
+                # Форматируем семейное положение
+                marital_text = format_field_value(MaritalStatus(marital), 'marital_status', _)
+                await callback.message.edit_text(
+                    f"✅ {_('Marital status updated successfully!')}\n\n"
+                    f"💑 {_('New status')}: {marital_text}",
+                    reply_markup=Keyboards.back_to_personal_data(_)
+                )
+        
+        await state.clear()
+        await callback.answer()
+        return
+    
+    # Полное заполнение данных
     await state.update_data(marital_status=marital)
     
     await callback.message.edit_text(
@@ -180,6 +350,36 @@ async def process_marital_status(callback: types.CallbackQuery, state: FSMContex
 async def process_education(callback: types.CallbackQuery, state: FSMContext, _: callable):
     """Обработка образования"""
     education = callback.data.split(":")[1]
+    data = await state.get_data()
+    
+    # Проверяем, это редактирование отдельного поля или полное заполнение
+    if 'editing_field' in data:
+        # Режим редактирования отдельного поля
+        user_id = data.get('user_id')
+        
+        async with get_db_context() as db:
+            result = await db.execute(
+                select(PersonalData).where(PersonalData.user_id == user_id)
+            )
+            personal_data = result.scalar_one_or_none()
+            
+            if personal_data:
+                personal_data.education = Education(education)
+                await db.commit()
+                
+                # Форматируем образование
+                education_text = format_field_value(Education(education), 'education', _)
+                await callback.message.edit_text(
+                    f"✅ {_('Education updated successfully!')}\n\n"
+                    f"🎓 {_('New education')}: {education_text}",
+                    reply_markup=Keyboards.back_to_personal_data(_)
+                )
+        
+        await state.clear()
+        await callback.answer()
+        return
+    
+    # Полное заполнение данных
     await state.update_data(education=education)
     
     await callback.message.edit_text(
@@ -200,6 +400,33 @@ async def process_closed_loans(message: types.Message, state: FSMContext, _: cal
         await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
         return
     
+    data = await state.get_data()
+    
+    # Проверяем, это редактирование отдельного поля или полное заполнение
+    if 'editing_field' in data:
+        # Режим редактирования отдельного поля
+        user_id = data.get('user_id')
+        
+        async with get_db_context() as db:
+            result = await db.execute(
+                select(PersonalData).where(PersonalData.user_id == user_id)
+            )
+            personal_data = result.scalar_one_or_none()
+            
+            if personal_data:
+                personal_data.closed_loans_count = count
+                await db.commit()
+                
+                await message.answer(
+                    f"✅ {_('Closed loans count updated successfully!')}\n\n"
+                    f"🏦 {_('Closed loans')}: {count}",
+                    reply_markup=Keyboards.back_to_personal_data(_)
+                )
+        
+        await state.clear()
+        return
+    
+    # Полное заполнение данных
     await state.update_data(closed_loans_count=count)
     
     await message.answer(
