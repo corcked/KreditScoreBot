@@ -549,10 +549,10 @@ async def process_region(callback: types.CallbackQuery, state: FSMContext, _: ca
             await db.commit()
             
             # Получаем детализацию скоринга
-            breakdown = ScoringCalculator.get_score_breakdown(schema)
+            breakdown = ScoringCalculator.get_score_breakdown(schema, _)
             
             # Форматируем сообщение
-            message = ScoringCalculator.format_score_message(score, breakdown)
+            message = ScoringCalculator.format_score_message(score, breakdown, _)
             message += f"\n\n✅ {_('Data saved successfully!')}"
             
             await callback.message.edit_text(

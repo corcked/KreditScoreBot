@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from decimal import Decimal
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Callable
 
 from src.core.enums import (
     Gender,
@@ -43,57 +43,68 @@ class ScoringCalculator:
         "age": {
             "condition": lambda age: age >= 35,
             "points": 70,
-            "description": "Возраст ≥ 35 лет"
+            "description": "Age ≥ 35 years",
+            "description_key": "Age ≥ 35 years"
         },
         "gender": {
             "condition": lambda gender: gender == Gender.FEMALE,
             "points": 20,
-            "description": "Женский пол"
+            "description": "Female gender",
+            "description_key": "Female gender"
         },
         "work_experience": {
             "condition": lambda months: months >= 24,
             "points": 20,
-            "description": "Стаж работы ≥ 24 месяцев"
+            "description": "Work experience ≥ 24 months",
+            "description_key": "Work experience ≥ 24 months"
         },
         "address_stability": {
             "condition": lambda years: years >= 3,
             "points": 30,
-            "description": "Проживание по адресу ≥ 3 лет"
+            "description": "Living at address ≥ 3 years",
+            "description_key": "Living at address ≥ 3 years"
         },
         "housing": {
             "condition": lambda status: status == HousingStatus.OWN,
             "points": 20,
-            "description": "Собственное жилье без ипотеки"
+            "description": "Own home without mortgage",
+            "description_key": "Own home without mortgage"
         },
         "marital": {
             "condition": lambda status: status == MaritalStatus.MARRIED,
             "points": 10,
-            "description": "Женат/замужем"
+            "description": "Married",
+            "description_key": "Married"
         },
         "education": {
             "condition": lambda edu: edu == Education.HIGHER,
             "points": 20,
-            "description": "Высшее образование"
+            "description": "Higher education",
+            "description_key": "Higher education"
         },
         "closed_loans": {
             "condition": lambda count: count >= 3,
             "points": 20,
-            "description": "Закрытых займов ≥ 3"
+            "description": "Closed loans ≥ 3",
+            "description_key": "Closed loans ≥ 3"
         },
         "other_loans_ok": {
             "condition": lambda pdn: pdn is not None and pdn <= 50,
             "points": 30,
-            "description": "Есть другие кредиты, но ПДН ≤ 50%"
+            "description": "Has other loans but DTI ≤ 50%",
+            "description_key": "Has other loans but DTI ≤ 50%"
         },
         "region": {
             "condition": lambda region: region in [Region.TASHKENT, Region.TASHKENT_REGION],
             "points": 20,
-            "description": "Ташкент или Ташкентская область"
+            "description": "Tashkent or Tashkent region",
+            "description_key": "Tashkent or Tashkent region"
         },
         "device": {
             "condition": lambda device: device == DeviceType.APPLE,
             "points": 20,
-            "description": "Устройство Apple"
+            "description": "Apple device",
+            "description_key": "Apple device"
         }
     }
 
@@ -158,12 +169,13 @@ class ScoringCalculator:
         return max(cls.MIN_SCORE, min(cls.MAX_SCORE, raw_score))
 
     @classmethod
-    def get_score_breakdown(cls, data: PersonalData) -> Dict[str, Any]:
+    def get_score_breakdown(cls, data: PersonalData, translate: Optional[Callable[[str], str]] = None) -> Dict[str, Any]:
         """
         Получение детализации скоринг-балла
         
         Args:
             data: Персональные данные
+            translate: Функция перевода (опционально)
             
         Returns:
             Словарь с детализацией баллов
@@ -177,69 +189,80 @@ class ScoringCalculator:
 
         # Проверка каждого компонента
         if data.age is not None and cls.SCORING_WEIGHTS["age"]["condition"](data.age):
+            desc = translate(cls.SCORING_WEIGHTS["age"]["description_key"]) if translate else cls.SCORING_WEIGHTS["age"]["description"]
             breakdown["components"].append({
-                "name": cls.SCORING_WEIGHTS["age"]["description"],
+                "name": desc,
                 "points": cls.SCORING_WEIGHTS["age"]["points"]
             })
 
         if data.gender is not None and cls.SCORING_WEIGHTS["gender"]["condition"](data.gender):
+            desc = translate(cls.SCORING_WEIGHTS["gender"]["description_key"]) if translate else cls.SCORING_WEIGHTS["gender"]["description"]
             breakdown["components"].append({
-                "name": cls.SCORING_WEIGHTS["gender"]["description"],
+                "name": desc,
                 "points": cls.SCORING_WEIGHTS["gender"]["points"]
             })
 
         if data.work_experience_months is not None and cls.SCORING_WEIGHTS["work_experience"]["condition"](data.work_experience_months):
+            desc = translate(cls.SCORING_WEIGHTS["work_experience"]["description_key"]) if translate else cls.SCORING_WEIGHTS["work_experience"]["description"]
             breakdown["components"].append({
-                "name": cls.SCORING_WEIGHTS["work_experience"]["description"],
+                "name": desc,
                 "points": cls.SCORING_WEIGHTS["work_experience"]["points"]
             })
 
         if data.address_stability_years is not None and cls.SCORING_WEIGHTS["address_stability"]["condition"](data.address_stability_years):
+            desc = translate(cls.SCORING_WEIGHTS["address_stability"]["description_key"]) if translate else cls.SCORING_WEIGHTS["address_stability"]["description"]
             breakdown["components"].append({
-                "name": cls.SCORING_WEIGHTS["address_stability"]["description"],
+                "name": desc,
                 "points": cls.SCORING_WEIGHTS["address_stability"]["points"]
             })
 
         if data.housing_status is not None and cls.SCORING_WEIGHTS["housing"]["condition"](data.housing_status):
+            desc = translate(cls.SCORING_WEIGHTS["housing"]["description_key"]) if translate else cls.SCORING_WEIGHTS["housing"]["description"]
             breakdown["components"].append({
-                "name": cls.SCORING_WEIGHTS["housing"]["description"],
+                "name": desc,
                 "points": cls.SCORING_WEIGHTS["housing"]["points"]
             })
 
         if data.marital_status is not None and cls.SCORING_WEIGHTS["marital"]["condition"](data.marital_status):
+            desc = translate(cls.SCORING_WEIGHTS["marital"]["description_key"]) if translate else cls.SCORING_WEIGHTS["marital"]["description"]
             breakdown["components"].append({
-                "name": cls.SCORING_WEIGHTS["marital"]["description"],
+                "name": desc,
                 "points": cls.SCORING_WEIGHTS["marital"]["points"]
             })
 
         if data.education is not None and cls.SCORING_WEIGHTS["education"]["condition"](data.education):
+            desc = translate(cls.SCORING_WEIGHTS["education"]["description_key"]) if translate else cls.SCORING_WEIGHTS["education"]["description"]
             breakdown["components"].append({
-                "name": cls.SCORING_WEIGHTS["education"]["description"],
+                "name": desc,
                 "points": cls.SCORING_WEIGHTS["education"]["points"]
             })
 
         if data.closed_loans_count is not None and cls.SCORING_WEIGHTS["closed_loans"]["condition"](data.closed_loans_count):
+            desc = translate(cls.SCORING_WEIGHTS["closed_loans"]["description_key"]) if translate else cls.SCORING_WEIGHTS["closed_loans"]["description"]
             breakdown["components"].append({
-                "name": cls.SCORING_WEIGHTS["closed_loans"]["description"],
+                "name": desc,
                 "points": cls.SCORING_WEIGHTS["closed_loans"]["points"]
             })
 
         if data.has_other_loans and data.pdn_with_other_loans is not None:
             if cls.SCORING_WEIGHTS["other_loans_ok"]["condition"](data.pdn_with_other_loans):
+                desc = translate(cls.SCORING_WEIGHTS["other_loans_ok"]["description_key"]) if translate else cls.SCORING_WEIGHTS["other_loans_ok"]["description"]
                 breakdown["components"].append({
-                    "name": cls.SCORING_WEIGHTS["other_loans_ok"]["description"],
+                    "name": desc,
                     "points": cls.SCORING_WEIGHTS["other_loans_ok"]["points"]
                 })
 
         if data.region is not None and cls.SCORING_WEIGHTS["region"]["condition"](data.region):
+            desc = translate(cls.SCORING_WEIGHTS["region"]["description_key"]) if translate else cls.SCORING_WEIGHTS["region"]["description"]
             breakdown["components"].append({
-                "name": cls.SCORING_WEIGHTS["region"]["description"],
+                "name": desc,
                 "points": cls.SCORING_WEIGHTS["region"]["points"]
             })
 
         if data.device_type is not None and cls.SCORING_WEIGHTS["device"]["condition"](data.device_type):
+            desc = translate(cls.SCORING_WEIGHTS["device"]["description_key"]) if translate else cls.SCORING_WEIGHTS["device"]["description"]
             breakdown["components"].append({
-                "name": cls.SCORING_WEIGHTS["device"]["description"],
+                "name": desc,
                 "points": cls.SCORING_WEIGHTS["device"]["points"]
             })
 
@@ -247,8 +270,12 @@ class ScoringCalculator:
         if data.referral_count > 0:
             referral_bonus = data.referral_count * cls.REFERRAL_BONUS
             breakdown["referral_bonus"] = referral_bonus
+            if translate:
+                name = translate('Referrals ({count} people)').format(count=data.referral_count)
+            else:
+                name = f"Referrals ({data.referral_count} people)"
             breakdown["components"].append({
-                "name": f"Рефералы ({data.referral_count} чел.)",
+                "name": name,
                 "points": referral_bonus
             })
 
@@ -257,18 +284,18 @@ class ScoringCalculator:
         return breakdown
 
     @classmethod
-    def get_score_level(cls, score: int) -> str:
+    def get_score_level(cls, score: int, translate: Optional[Callable[[str], str]] = None) -> str:
         """Определение уровня скоринга"""
         if score >= 800:
-            return "Отличный"
+            return translate('Excellent') if translate else 'Excellent'
         elif score >= 700:
-            return "Хороший"
+            return translate('Good') if translate else 'Good'
         elif score >= 600:
-            return "Средний"
+            return translate('Average') if translate else 'Average'
         elif score >= 500:
-            return "Ниже среднего"
+            return translate('Below average') if translate else 'Below average'
         else:
-            return "Низкий"
+            return translate('Low') if translate else 'Low'
 
     @classmethod
     def get_completion_percentage(cls, data: PersonalData) -> int:
@@ -295,16 +322,25 @@ class ScoringCalculator:
         return int((filled / len(fields)) * 100)
 
     @classmethod
-    def format_score_message(cls, score: int, breakdown: Dict[str, Any]) -> str:
+    def format_score_message(cls, score: int, breakdown: Dict[str, Any], translate: Optional[Callable[[str], str]] = None) -> str:
         """Форматирование сообщения со скорингом для пользователя"""
-        level = cls.get_score_level(score)
+        level = cls.get_score_level(score, translate)
         
-        message = f"📊 **Ваш скоринг-балл: {score}**\\n"
-        message += f"Уровень: {level}\\n\\n"
-        
-        if breakdown["components"]:
-            message += "**Детализация:**\\n"
-            for component in breakdown["components"]:
-                message += f"✅ {component['name']}: +{component['points']}\\n"
+        if translate:
+            message = f"📊 **{translate('Your credit score: {score}').format(score=score)}**\\n"
+            message += f"{translate('Level: {level}').format(level=level)}\\n\\n"
+            
+            if breakdown["components"]:
+                message += f"**{translate('Breakdown:')}**\\n"
+                for component in breakdown["components"]:
+                    message += f"✅ {component['name']}: +{component['points']}\\n"
+        else:
+            message = f"📊 **Your credit score: {score}**\\n"
+            message += f"Level: {level}\\n\\n"
+            
+            if breakdown["components"]:
+                message += "**Breakdown:**\\n"
+                for component in breakdown["components"]:
+                    message += f"✅ {component['name']}: +{component['points']}\\n"
         
         return message
