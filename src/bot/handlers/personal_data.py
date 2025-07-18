@@ -676,10 +676,117 @@ async def start_field_editing(callback: types.CallbackQuery, field_name: str, pe
         await state.set_state(PersonalDataStates.choosing_has_loans)
         await callback.message.edit_text(
             _('Do you have other loans?'),
-            reply_markup=Keyboards.yes_no_choice(_)
+            reply_markup=Keyboards.yes_no_choice(_, "has_loans")
         )
     else:
         await callback.answer(_("This field cannot be edited"), show_alert=True)
         return
     
+    await callback.answer()
+
+
+@router.message(PersonalDataStates.entering_income)
+async def process_income_edit(message: types.Message, state: FSMContext, _: callable):
+    """Обработка редактирования дохода"""
+    valid, amount, error = validate_positive_number(message.text, _("Income"))
+    
+    if not valid:
+        await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
+        return
+    
+    data = await state.get_data()
+    user_id = data.get('user_id')
+    
+    async with get_db_context() as db:
+        result = await db.execute(
+            select(PersonalData).where(PersonalData.user_id == user_id)
+        )
+        personal_data = result.scalar_one_or_none()
+        
+        if personal_data:
+            personal_data.monthly_income = amount
+            await db.commit()
+            
+            await message.answer(
+                f"✅ {_('Income updated successfully!')}\n\n"
+                f"💰 {_('New income')}: {amount:,.0f} {_('som')}".replace(",", " "),
+                reply_markup=Keyboards.back_to_personal_data(_)
+            )
+    
+    await state.clear()
+
+
+@router.message(PersonalDataStates.entering_other_loans_payment)
+async def process_other_loans_payment_edit(message: types.Message, state: FSMContext, _: callable):
+    """Обработка редактирования платежей по другим кредитам"""
+    valid, amount, error = validate_positive_number(message.text, _("Payment amount"))
+    
+    if not valid:
+        await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
+        return
+    
+    data = await state.get_data()
+    user_id = data.get('user_id')
+    
+    async with get_db_context() as db:
+        result = await db.execute(
+            select(PersonalData).where(PersonalData.user_id == user_id)
+        )
+        personal_data = result.scalar_one_or_none()
+        
+        if personal_data:
+            personal_data.other_loans_monthly_payment = amount
+            await db.commit()
+            
+            await message.answer(
+                f"✅ {_('Other loans payment updated successfully!')}\n\n"
+                f"💳 {_('New payment amount')}: {amount:,.0f} {_('som')}".replace(",", " "),
+                reply_markup=Keyboards.back_to_personal_data(_)
+            )
+    
+    await state.clear()
+
+
+@router.callback_query(PersonalDataStates.choosing_has_loans, F.data.in_(["has_loans:yes", "has_loans:no"]))
+async def process_has_loans_edit(callback: types.CallbackQuery, state: FSMContext, _: callable):
+    """Обработка редактирования наличия других кредитов"""
+    has_loans = callback.data.split(":")[1] == "yes"
+    
+    data = await state.get_data()
+    user_id = data.get('user_id')
+    
+    async with get_db_context() as db:
+        result = await db.execute(
+            select(PersonalData).where(PersonalData.user_id == user_id)
+        )
+        personal_data = result.scalar_one_or_none()
+        
+        if personal_data:
+            personal_data.has_other_loans = has_loans
+            
+            # Если кредитов нет, обнуляем платежи
+            if not has_loans:
+                personal_data.other_loans_monthly_payment = 0
+            
+            await db.commit()
+            
+            status = _("Yes") if has_loans else _("No")
+            await callback.message.edit_text(
+                f"✅ {_('Loan status updated successfully!')}\n\n"
+                f"🏦 {_('Other loans')}: {status}",
+                reply_markup=Keyboards.back_to_personal_data(_)
+            )
+    
+    await state.clear()
+    await callback.answer()
+
+
+@router.callback_query(F.data == "cancel")
+async def cancel_editing(callback: types.CallbackQuery, state: FSMContext, _: callable):
+    """Отмена редактирования"""
+    await state.clear()
+    await callback.message.edit_text(
+        f"❌ {_('Editing cancelled')}",
+        reply_markup=Keyboards.main_menu(_)
+    )
     await callback.answer()
