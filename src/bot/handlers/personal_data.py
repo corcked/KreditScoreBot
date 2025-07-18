@@ -113,71 +113,71 @@ async def process_gender(callback: types.CallbackQuery, state: FSMContext, _: ca
 
 
 @router.message(PersonalDataStates.entering_work_experience)
-async def process_work_experience(message: types.Message, state: FSMContext):
+async def process_work_experience(message: types.Message, state: FSMContext, _: callable):
     """Обработка стажа работы"""
     valid, months, error = validate_positive_number(message.text, "Стаж")
     
     if not valid:
-        await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button())
+        await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
         return
     
     await state.update_data(work_experience_months=months)
     
     await message.answer(
         "Сколько лет вы проживаете по текущему адресу?",
-        reply_markup=Keyboards.cancel_button()
+        reply_markup=Keyboards.cancel_button(_)
     )
     await state.set_state(PersonalDataStates.entering_address_stability)
 
 
 @router.message(PersonalDataStates.entering_address_stability)
-async def process_address_stability(message: types.Message, state: FSMContext):
+async def process_address_stability(message: types.Message, state: FSMContext, _: callable):
     """Обработка стабильности адреса"""
     valid, years, error = validate_positive_number(message.text, "Количество лет")
     
     if not valid:
-        await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button())
+        await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
         return
     
     await state.update_data(address_stability_years=years)
     
     await message.answer(
         "Укажите ваш статус жилья:",
-        reply_markup=Keyboards.housing_status_choice()
+        reply_markup=Keyboards.housing_status_choice(_)
     )
     await state.set_state(PersonalDataStates.choosing_housing_status)
 
 
 @router.callback_query(PersonalDataStates.choosing_housing_status, F.data.startswith("house:"))
-async def process_housing_status(callback: types.CallbackQuery, state: FSMContext):
+async def process_housing_status(callback: types.CallbackQuery, state: FSMContext, _: callable):
     """Обработка статуса жилья"""
     housing = callback.data.split(":")[1]
     await state.update_data(housing_status=housing)
     
     await callback.message.edit_text(
         "Укажите ваше семейное положение:",
-        reply_markup=Keyboards.marital_status_choice()
+        reply_markup=Keyboards.marital_status_choice(_)
     )
     await state.set_state(PersonalDataStates.choosing_marital_status)
     await callback.answer()
 
 
 @router.callback_query(PersonalDataStates.choosing_marital_status, F.data.startswith("marital:"))
-async def process_marital_status(callback: types.CallbackQuery, state: FSMContext):
+async def process_marital_status(callback: types.CallbackQuery, state: FSMContext, _: callable):
     """Обработка семейного положения"""
     marital = callback.data.split(":")[1]
     await state.update_data(marital_status=marital)
     
     await callback.message.edit_text(
         "Укажите ваш уровень образования:",
-        reply_markup=Keyboards.education_choice()
+        reply_markup=Keyboards.education_choice(_)
     )
     await state.set_state(PersonalDataStates.choosing_education)
     await callback.answer()
 
 
 @router.callback_query(PersonalDataStates.choosing_education, F.data.startswith("edu:"))
-async def process_education(callback: types.CallbackQuery, state: FSMContext):
+async def process_education(callback: types.CallbackQuery, state: FSMContext, _: callable):
     """Обработка образования"""
     education = callback.data.split(":")[1]
     await state.update_data(education=education)
@@ -185,46 +185,46 @@ async def process_education(callback: types.CallbackQuery, state: FSMContext):
     await callback.message.edit_text(
         "Сколько кредитов вы успешно закрыли?\n"
         "(введите 0, если не было кредитов)",
-        reply_markup=Keyboards.cancel_button()
+        reply_markup=Keyboards.cancel_button(_)
     )
     await state.set_state(PersonalDataStates.entering_closed_loans)
     await callback.answer()
 
 
 @router.message(PersonalDataStates.entering_closed_loans)
-async def process_closed_loans(message: types.Message, state: FSMContext):
+async def process_closed_loans(message: types.Message, state: FSMContext, _: callable):
     """Обработка количества закрытых кредитов"""
     valid, count, error = validate_positive_number(message.text, "Количество кредитов")
     
     if not valid:
-        await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button())
+        await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
         return
     
     await state.update_data(closed_loans_count=count)
     
     await message.answer(
         "В каком регионе вы проживаете?",
-        reply_markup=Keyboards.region_choice()
+        reply_markup=Keyboards.region_choice(_)
     )
     await state.set_state(PersonalDataStates.choosing_region)
 
 
 @router.callback_query(PersonalDataStates.choosing_region, F.data == "region_more")
-async def show_more_regions(callback: types.CallbackQuery):
+async def show_more_regions(callback: types.CallbackQuery, _: callable):
     """Показать дополнительные регионы"""
-    await callback.message.edit_reply_markup(reply_markup=Keyboards.region_choice_more())
+    await callback.message.edit_reply_markup(reply_markup=Keyboards.region_choice_more(_))
     await callback.answer()
 
 
 @router.callback_query(PersonalDataStates.choosing_region, F.data == "region_back")
-async def show_less_regions(callback: types.CallbackQuery):
+async def show_less_regions(callback: types.CallbackQuery, _: callable):
     """Вернуться к первой части регионов"""
-    await callback.message.edit_reply_markup(reply_markup=Keyboards.region_choice())
+    await callback.message.edit_reply_markup(reply_markup=Keyboards.region_choice(_))
     await callback.answer()
 
 
 @router.callback_query(PersonalDataStates.choosing_region, F.data.startswith("region:"))
-async def process_region(callback: types.CallbackQuery, state: FSMContext):
+async def process_region(callback: types.CallbackQuery, state: FSMContext, _: callable):
     """Обработка выбора региона"""
     region = callback.data.split(":")[1]
     await state.update_data(region=region)
@@ -302,7 +302,7 @@ async def process_region(callback: types.CallbackQuery, state: FSMContext):
             
             await callback.message.edit_text(
                 message,
-                reply_markup=Keyboards.main_menu(),
+                reply_markup=Keyboards.main_menu(_),
                 parse_mode="Markdown"
             )
     
