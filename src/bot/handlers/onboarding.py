@@ -15,7 +15,7 @@ router = Router(name="onboarding")
 
 
 @router.message(CommandStart())
-async def cmd_start(message: types.Message, state: FSMContext):
+async def cmd_start(message: types.Message, state: FSMContext, _: callable):
     """Обработка команды /start"""
     user_id = message.from_user.id
     
@@ -35,41 +35,43 @@ async def cmd_start(message: types.Message, state: FSMContext):
         if user:
             # Пользователь уже зарегистрирован
             await message.answer(
-                f"С возвращением, {message.from_user.first_name}! 👋\n\n"
-                "Выберите действие из меню:",
-                reply_markup=Keyboards.main_menu()
+                f"{_('Welcome!')} {message.from_user.first_name}! 👋\n\n"
+                f"{_('Main menu')}:",
+                reply_markup=Keyboards.main_menu(_)
             )
             await state.clear()
         else:
             # Новый пользователь - начинаем онбординг
             await state.update_data(referral_code=referral_code)
             
+            welcome_msg = _('Welcome! I am KreditScore Bot.')
+            help_msg = _('I will help you:')
             welcome_text = (
-                "Добро пожаловать в KreditScore! 🎉\n\n"
-                "Я помогу вам:\n"
-                "• Рассчитать показатель долговой нагрузки\n"
-                "• Оценить вероятность одобрения кредита\n"
-                "• Подобрать лучшие предложения от банков\n\n"
-                "Для начала мне нужен ваш номер телефона."
+                f"{welcome_msg} 🎉\n\n"
+                f"{help_msg}\n"
+                f"• {_('Calculate debt burden indicator')}\n"
+                f"• {_('Get credit score')}\n"
+                f"• {_('Apply for a loan')}\n\n"
+                f"{_('Share your phone number to continue')}"
             )
             
             await message.answer(
                 welcome_text,
-                reply_markup=Keyboards.phone_request()
+                reply_markup=Keyboards.phone_request(_)
             )
             await state.set_state(OnboardingStates.waiting_for_phone)
 
 
 @router.message(OnboardingStates.waiting_for_phone, F.contact)
-async def process_phone(message: types.Message, state: FSMContext):
+async def process_phone(message: types.Message, state: FSMContext, _: callable):
     """Обработка полученного контакта"""
     contact = message.contact
     
     # Проверяем, что это контакт самого пользователя
     if contact.user_id != message.from_user.id:
         await message.answer(
-            "⚠️ Пожалуйста, поделитесь своим номером телефона.",
-            reply_markup=Keyboards.phone_request()
+            f"⚠️ {_('Share your phone number to continue')}",
+            reply_markup=Keyboards.phone_request(_)
         )
         return
     
@@ -77,8 +79,8 @@ async def process_phone(message: types.Message, state: FSMContext):
     phone = validate_phone_number(contact.phone_number)
     if not phone:
         await message.answer(
-            "⚠️ Некорректный номер телефона. Попробуйте еще раз.",
-            reply_markup=Keyboards.phone_request()
+            f"⚠️ {_('Incorrect phone number. Try again.')}",
+            reply_markup=Keyboards.phone_request(_)
         )
         return
     
@@ -136,29 +138,29 @@ async def process_phone(message: types.Message, state: FSMContext):
     
     # Убираем клавиатуру
     await message.answer(
-        "Отлично! Теперь выберите язык интерфейса:",
+        f"✅ {_('Welcome!')}",
         reply_markup=Keyboards.remove()
     )
     
     # Предлагаем выбрать язык
     await message.answer(
-        "Выберите язык / Tilni tanlang:",
-        reply_markup=Keyboards.language_choice()
+        f"{_('Choose language')} / Tilni tanlang:",
+        reply_markup=Keyboards.language_choice(_)
     )
     await state.set_state(OnboardingStates.waiting_for_language)
 
 
 @router.message(OnboardingStates.waiting_for_phone)
-async def process_phone_text(message: types.Message):
+async def process_phone_text(message: types.Message, _: callable):
     """Обработка текстового сообщения вместо контакта"""
     await message.answer(
-        "Пожалуйста, используйте кнопку для отправки номера телефона.",
-        reply_markup=Keyboards.phone_request()
+        f"{_('Share your phone number to continue')}",
+        reply_markup=Keyboards.phone_request(_)
     )
 
 
 @router.callback_query(OnboardingStates.waiting_for_language, F.data.startswith("lang:"))
-async def process_language(callback: types.CallbackQuery, state: FSMContext):
+async def process_language(callback: types.CallbackQuery, state: FSMContext, _: callable):
     """Обработка выбора языка"""
     language = callback.data.split(":")[1]
     
@@ -173,15 +175,20 @@ async def process_language(callback: types.CallbackQuery, state: FSMContext):
             user.language_code = language
             await db.commit()
     
+    # Обновляем функцию перевода для нового языка
+    from src.bot.i18n import simple_gettext
+    new_translate = lambda msg: simple_gettext(language, msg)
+    
     # Завершаем онбординг
+    help_msg = new_translate('I will help you:')
     await callback.message.edit_text(
-        "✅ Регистрация завершена!\n\n"
-        "Теперь вы можете:\n"
-        "• Подать заявку на кредит\n"
-        "• Рассчитать долговую нагрузку\n"
-        "• Узнать свой кредитный рейтинг\n\n"
-        "Выберите действие из меню:",
-        reply_markup=Keyboards.main_menu()
+        f"✅ {new_translate('Welcome!')}\n\n"
+        f"{help_msg}\n"
+        f"• {new_translate('Apply for a loan')}\n"
+        f"• {new_translate('Calculate debt burden indicator')}\n"
+        f"• {new_translate('Get credit score')}\n\n"
+        f"{new_translate('Main menu')}:",
+        reply_markup=Keyboards.main_menu(new_translate)
     )
     
     await state.clear()
@@ -189,7 +196,7 @@ async def process_language(callback: types.CallbackQuery, state: FSMContext):
 
 
 @router.message(Command("menu"))
-async def cmd_menu(message: types.Message, state: FSMContext):
+async def cmd_menu(message: types.Message, state: FSMContext, _: callable):
     """Команда для отображения главного меню"""
     async with get_db_context() as db:
         result = await db.execute(
@@ -199,23 +206,23 @@ async def cmd_menu(message: types.Message, state: FSMContext):
         
         if not user:
             await message.answer(
-                "Вы еще не зарегистрированы. Используйте /start для начала."
+                _('You are not registered. Use /start to begin.')
             )
             return
     
     await message.answer(
-        "Главное меню:",
-        reply_markup=Keyboards.main_menu()
+        f"{_('Main menu')}:",
+        reply_markup=Keyboards.main_menu(_)
     )
     await state.clear()
 
 
 @router.callback_query(F.data == "main_menu")
-async def show_main_menu(callback: types.CallbackQuery, state: FSMContext):
+async def show_main_menu(callback: types.CallbackQuery, state: FSMContext, _: callable):
     """Показать главное меню"""
     await callback.message.edit_text(
-        "Главное меню:",
-        reply_markup=Keyboards.main_menu()
+        f"{_('Main menu')}:",
+        reply_markup=Keyboards.main_menu(_)
     )
     await state.clear()
     await callback.answer()

@@ -5,14 +5,15 @@ import sys
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 
-from src.bot.handlers import bank_flow, loan, onboarding, personal_data, referral, score
+from src.bot.handlers import bank_flow, loan, onboarding, personal_data, referral, score, settings
+from src.bot.middleware.i18n import I18nMiddleware
 from src.bot.middleware.rate_limit import RateLimitMiddleware
-from src.config.settings import settings
+from src.config.settings import settings as app_settings
 from src.db.database import close_db, init_db
 
 # Настройка логирования
 logging.basicConfig(
-    level=getattr(logging, settings.log_level),
+    level=getattr(logging, app_settings.log_level),
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[logging.StreamHandler(sys.stdout)]
 )
@@ -36,7 +37,7 @@ async def on_shutdown():
 async def main():
     """Основная функция запуска бота"""
     # Инициализация бота и диспетчера
-    bot = Bot(token=settings.bot_token, parse_mode="Markdown")
+    bot = Bot(token=app_settings.bot_token, parse_mode="Markdown")
     storage = MemoryStorage()
     dp = Dispatcher(storage=storage)
     
@@ -45,6 +46,8 @@ async def main():
     logger.info("Webhook deleted, starting polling mode")
     
     # Регистрация middleware
+    dp.message.middleware(I18nMiddleware())
+    dp.callback_query.middleware(I18nMiddleware())
     dp.message.middleware(RateLimitMiddleware())
     dp.callback_query.middleware(RateLimitMiddleware())
     
@@ -55,6 +58,7 @@ async def main():
     dp.include_router(referral.router)
     dp.include_router(bank_flow.router)
     dp.include_router(score.router)
+    dp.include_router(settings.router)
     
     # Установка команд бота
     from aiogram.types import BotCommand
@@ -74,11 +78,11 @@ async def main():
     
     # Запуск бота
     try:
-        if settings.webhook_enabled:
+        if app_settings.webhook_enabled:
             # Webhook режим для продакшена
-            logger.info(f"Starting webhook on {settings.webhook_url}")
+            logger.info(f"Starting webhook on {app_settings.webhook_url}")
             # Здесь должна быть настройка webhook
-            # await bot.set_webhook(settings.webhook_url + settings.get_webhook_path())
+            # await bot.set_webhook(app_settings.webhook_url + app_settings.get_webhook_path())
             # Но для простоты используем polling
             await dp.start_polling(bot)
         else:

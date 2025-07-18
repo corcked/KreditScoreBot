@@ -9,7 +9,8 @@
       "Bash(cd:*)",
       "Bash(git push origin main)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": []
   }

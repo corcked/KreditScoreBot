@@ -180,15 +180,16 @@ class PDNCalculator:
         return f"{amount:,.0f}".replace(",", " ")
 
     @staticmethod
-    def get_pdn_description(pdn_value: Decimal, status: PDNStatus) -> str:
+    def get_pdn_description(pdn_value: Decimal, status: PDNStatus, translate=None) -> str:
         """Получение описания ПДН для пользователя"""
+        _ = translate if translate else lambda x: x
         emoji = PDNCalculator.get_pdn_emoji(status)
         
         if status == PDNStatus.GREEN:
-            desc = "Отличный показатель! Банки охотно одобрят кредит."
+            desc = _("Excellent indicator! Banks will readily approve the loan.")
         elif status == PDNStatus.YELLOW:
-            desc = "Приемлемый показатель. Возможно одобрение кредита."
+            desc = _("Acceptable indicator. Loan approval is possible.")
         else:
-            desc = "Высокая долговая нагрузка! Банки не смогут выдать кредит."
+            desc = _("High debt burden! Banks won't be able to issue a loan.")
             
-        return f"{emoji} ПДН: {pdn_value}%\\n{desc}"
+        return f"{emoji} {_('DTI')}: {pdn_value}%\\n{desc}"
