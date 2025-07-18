@@ -257,3 +257,79 @@ class Keyboards:
             [InlineKeyboardButton(text=f"🔙 {_('Main menu')}", callback_data="main_menu")],
         ]
         return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+    @staticmethod
+    def personal_data_menu_protected(field_status: dict, _: Callable[[str], str]) -> InlineKeyboardMarkup:
+        """Меню персональных данных с учетом защиты полей"""
+        keyboard = []
+        
+        # Кнопки для редактируемых полей
+        editable_fields = [
+            (name, status) for name, status in field_status.items() 
+            if not status['is_protected']
+        ]
+        
+        if editable_fields:
+            keyboard.append([InlineKeyboardButton(
+                text=f"✏️ {_('Edit available fields')}",
+                callback_data="edit_available_fields"
+            )])
+        
+        # Кнопка просмотра защищенных данных
+        protected_count = sum(1 for s in field_status.values() if s['is_protected'])
+        if protected_count > 0:
+            keyboard.append([InlineKeyboardButton(
+                text=f"🔒 {_('View protected data')} ({protected_count})",
+                callback_data="view_protected_data"
+            )])
+        
+        # Кнопка объяснения защиты
+        if protected_count > 0:
+            keyboard.append([InlineKeyboardButton(
+                text=f"❓ {_('Why are fields protected?')}",
+                callback_data="explain_protection"
+            )])
+        
+        keyboard.append([InlineKeyboardButton(text=f"◀️ {_('Back')}", callback_data="main_menu")])
+        
+        return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+    @staticmethod
+    def editable_fields_menu(field_status: dict, _: Callable[[str], str]) -> InlineKeyboardMarkup:
+        """Меню редактируемых полей"""
+        keyboard = []
+        
+        # Добавляем кнопки только для редактируемых полей
+        for field_name, status in field_status.items():
+            if not status['is_protected']:
+                icon = "💰" if field_name == 'monthly_income' else "📝"
+                text = f"{icon} {_(status['display_name'])}"
+                
+                if status['is_filled']:
+                    text += " ✅"
+                
+                keyboard.append([InlineKeyboardButton(
+                    text=text,
+                    callback_data=f"edit_field:{field_name}"
+                )])
+        
+        keyboard.append([InlineKeyboardButton(text=f"◀️ {_('Back')}", callback_data="edit_personal_data")])
+        
+        return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+    @staticmethod
+    def back_to_personal_data(_: Callable[[str], str]) -> InlineKeyboardMarkup:
+        """Кнопка возврата к персональным данным"""
+        keyboard = [
+            [InlineKeyboardButton(text=f"◀️ {_('Back')}", callback_data="edit_personal_data")]
+        ]
+        return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+    @staticmethod
+    def back_to_menu(_: Callable[[str], str]) -> InlineKeyboardMarkup:
+        """Кнопка возврата в главное меню"""
+        keyboard = [
+            [InlineKeyboardButton(text=f"🔙 {_('Main menu')}", callback_data="main_menu")]
+        ]
+        return InlineKeyboardMarkup(inline_keyboard=keyboard)
+

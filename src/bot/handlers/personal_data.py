@@ -424,9 +424,9 @@ def format_field_value(value: any, field_name: str, _: callable) -> str:
     elif field_name == 'housing_status':
         housing_map = {
             HousingStatus.OWN: _("Own property"),
+            HousingStatus.OWN_WITH_MORTGAGE: _("Own with mortgage"),
             HousingStatus.RENT: _("Rent"),
-            HousingStatus.RELATIVES: _("With relatives"),
-            HousingStatus.MORTGAGE: _("Mortgage")
+            HousingStatus.RELATIVES: _("With relatives")
         }
         return housing_map.get(value, str(value))
     elif field_name == 'marital_status':
@@ -451,8 +451,9 @@ def format_field_value(value: any, field_name: str, _: callable) -> str:
         return str(value.value).replace('_', ' ')
     elif field_name == 'device_type':
         device_map = {
-            DeviceType.MOBILE: _("Mobile"),
-            DeviceType.WEB: _("Web")
+            DeviceType.APPLE: _("Apple"),
+            DeviceType.ANDROID: _("Android"),
+            DeviceType.OTHER: _("Other")
         }
         return device_map.get(value, str(value))
     

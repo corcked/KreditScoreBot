@@ -17,7 +17,6 @@ class FieldProtectionManager:
         'education': 'Образование',
         'closed_loans_count': 'Количество закрытых займов',
         'region': 'Регион проживания',
-        'device_type': 'Тип устройства'
     }
     
     # Поля, которые всегда можно редактировать
