@@ -232,6 +232,34 @@ async def process_region(callback: types.CallbackQuery, state: FSMContext, _: ca
     # Сохраняем все данные
     data = await state.get_data()
     
+    # Проверяем, это редактирование отдельного поля или полное заполнение
+    if 'editing_field' in data:
+        # Это редактирование отдельного поля региона
+        user_id = data.get('user_id')
+        
+        async with get_db_context() as db:
+            result = await db.execute(
+                select(PersonalData).where(PersonalData.user_id == user_id)
+            )
+            personal_data = result.scalar_one_or_none()
+            
+            if personal_data:
+                personal_data.region = Region(region)
+                await db.commit()
+                
+                # Форматируем название региона
+                region_name = region.replace('_', ' ').title()
+                await callback.message.edit_text(
+                    f"✅ {_('Region updated successfully!')}\n\n"
+                    f"📍 {_('New region')}: {region_name}",
+                    reply_markup=Keyboards.back_to_personal_data(_)
+                )
+        
+        await state.clear()
+        await callback.answer()
+        return
+    
+    # Это полное заполнение данных - продолжаем как раньше
     async with get_db_context() as db:
         # Обновляем персональные данные
         result = await db.execute(
@@ -685,6 +713,7 @@ async def start_field_editing(callback: types.CallbackQuery, field_name: str, pe
     await callback.answer()
 
 
+
 @router.message(PersonalDataStates.entering_income)
 async def process_income_edit(message: types.Message, state: FSMContext, _: callable):
     """Обработка редактирования дохода"""
@@ -779,6 +808,8 @@ async def process_has_loans_edit(callback: types.CallbackQuery, state: FSMContex
     
     await state.clear()
     await callback.answer()
+
+
 
 
 @router.callback_query(F.data == "cancel")
