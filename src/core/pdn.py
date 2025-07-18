@@ -1,5 +1,5 @@
 from decimal import Decimal, ROUND_HALF_UP
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Callable
 
 from src.core.enums import PDNStatus, LoanType
 
@@ -33,7 +33,8 @@ class PDNCalculator:
 
     @staticmethod
     def calculate_annuity_payment(
-        amount: Decimal, annual_rate: Decimal, term_months: int
+        amount: Decimal, annual_rate: Decimal, term_months: int,
+        translate: Optional[Callable[[str], str]] = None
     ) -> Decimal:
         """
         Расчет аннуитетного платежа по формуле:
@@ -43,12 +44,14 @@ class PDNCalculator:
             amount: Сумма кредита
             annual_rate: Годовая процентная ставка (в процентах)
             term_months: Срок кредита в месяцах
+            translate: Функция перевода (опционально)
             
         Returns:
             Ежемесячный аннуитетный платеж
         """
         if amount <= 0 or annual_rate < 0 or term_months <= 0:
-            raise ValueError("Некорректные параметры для расчета")
+            msg = translate('Invalid calculation parameters') if translate else 'Invalid calculation parameters'
+            raise ValueError(msg)
 
         # Если ставка 0%, то просто делим сумму на количество месяцев
         if annual_rate == 0:
@@ -72,6 +75,7 @@ class PDNCalculator:
         monthly_payment: Decimal,
         monthly_income: Decimal,
         other_payments: Optional[Decimal] = None,
+        translate: Optional[Callable[[str], str]] = None
     ) -> Decimal:
         """
         Расчет показателя долговой нагрузки (ПДН)
@@ -80,12 +84,14 @@ class PDNCalculator:
             monthly_payment: Ежемесячный платеж по новому кредиту
             monthly_income: Ежемесячный доход
             other_payments: Ежемесячные платежи по другим кредитам
+            translate: Функция перевода (опционально)
             
         Returns:
             ПДН в процентах
         """
         if monthly_income <= 0:
-            raise ValueError("Доход должен быть положительным")
+            msg = translate('Income must be positive') if translate else 'Income must be positive'
+            raise ValueError(msg)
 
         total_payments = monthly_payment
         if other_payments and other_payments > 0:
@@ -123,7 +129,8 @@ class PDNCalculator:
 
     @staticmethod
     def validate_loan_parameters(
-        loan_type: LoanType, amount: Decimal, rate: Decimal, term_months: int
+        loan_type: LoanType, amount: Decimal, rate: Decimal, term_months: int,
+        translate: Optional[Callable[[str], str]] = None
     ) -> Dict[str, Any]:
         """
         Валидация параметров кредита
@@ -133,6 +140,7 @@ class PDNCalculator:
             amount: Сумма кредита
             rate: Процентная ставка
             term_months: Срок в месяцах
+            translate: Функция перевода (опционально)
             
         Returns:
             Словарь с результатами валидации
@@ -141,27 +149,37 @@ class PDNCalculator:
         errors = []
 
         if amount <= 0:
-            errors.append("Сумма кредита должна быть положительной")
+            msg = translate('Loan amount must be positive') if translate else 'Loan amount must be positive'
+            errors.append(msg)
         elif amount > limits["max_amount"]:
-            errors.append(
-                f"Сумма превышает максимальную для {loan_type.value}: "
-                f"{limits['max_amount']:,} сум"
-            )
+            if translate:
+                msg = translate('Amount exceeds maximum for {loan_type}: {max_amount} sum').format(
+                    loan_type=loan_type.value, max_amount=f"{limits['max_amount']:,}"
+                )
+            else:
+                msg = f"Amount exceeds maximum for {loan_type.value}: {limits['max_amount']:,} sum"
+            errors.append(msg)
 
         if rate < limits["min_rate"] or rate > limits["max_rate"]:
-            errors.append(
-                f"Ставка должна быть от {limits['min_rate']}% "
-                f"до {limits['max_rate']}%"
-            )
+            if translate:
+                msg = translate('Rate must be between {min_rate}% and {max_rate}%').format(
+                    min_rate=limits['min_rate'], max_rate=limits['max_rate']
+                )
+            else:
+                msg = f"Rate must be between {limits['min_rate']}% and {limits['max_rate']}%"
+            errors.append(msg)
 
         if (
             term_months < limits["min_term_months"]
             or term_months > limits["max_term_months"]
         ):
-            errors.append(
-                f"Срок должен быть от {limits['min_term_months']} "
-                f"до {limits['max_term_months']} месяцев"
-            )
+            if translate:
+                msg = translate('Term must be from {min_term} to {max_term} months').format(
+                    min_term=limits['min_term_months'], max_term=limits['max_term_months']
+                )
+            else:
+                msg = f"Term must be from {limits['min_term_months']} to {limits['max_term_months']} months"
+            errors.append(msg)
 
         return {"valid": len(errors) == 0, "errors": errors}
 
