@@ -171,7 +171,7 @@ async def process_gender(callback: types.CallbackQuery, state: FSMContext, _: ca
 @router.message(PersonalDataStates.entering_work_experience)
 async def process_work_experience(message: types.Message, state: FSMContext, _: callable):
     """Обработка стажа работы"""
-    valid, months, error = validate_positive_number(message.text, "Стаж")
+    valid, months, error = validate_positive_number(message.text, _('Work experience'))
     
     if not valid:
         await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
@@ -207,7 +207,7 @@ async def process_work_experience(message: types.Message, state: FSMContext, _: 
     await state.update_data(work_experience_months=months)
     
     await message.answer(
-        "Сколько лет вы проживаете по текущему адресу?",
+        _('How many years have you lived at your current address?'),
         reply_markup=Keyboards.cancel_button(_)
     )
     await state.set_state(PersonalDataStates.entering_address_stability)
@@ -216,7 +216,7 @@ async def process_work_experience(message: types.Message, state: FSMContext, _: 
 @router.message(PersonalDataStates.entering_address_stability)
 async def process_address_stability(message: types.Message, state: FSMContext, _: callable):
     """Обработка стабильности адреса"""
-    valid, years, error = validate_positive_number(message.text, "Количество лет")
+    valid, years, error = validate_positive_number(message.text, _('Number of years'))
     
     if not valid:
         await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
@@ -252,7 +252,7 @@ async def process_address_stability(message: types.Message, state: FSMContext, _
     await state.update_data(address_stability_years=years)
     
     await message.answer(
-        "Укажите ваш статус жилья:",
+        _('Specify your housing status:'),
         reply_markup=Keyboards.housing_status_choice(_)
     )
     await state.set_state(PersonalDataStates.choosing_housing_status)
@@ -295,7 +295,7 @@ async def process_housing_status(callback: types.CallbackQuery, state: FSMContex
     await state.update_data(housing_status=housing)
     
     await callback.message.edit_text(
-        "Укажите ваше семейное положение:",
+        _('Specify your marital status:'),
         reply_markup=Keyboards.marital_status_choice(_)
     )
     await state.set_state(PersonalDataStates.choosing_marital_status)
@@ -339,7 +339,7 @@ async def process_marital_status(callback: types.CallbackQuery, state: FSMContex
     await state.update_data(marital_status=marital)
     
     await callback.message.edit_text(
-        "Укажите ваш уровень образования:",
+        _('Specify your education level:'),
         reply_markup=Keyboards.education_choice(_)
     )
     await state.set_state(PersonalDataStates.choosing_education)
@@ -383,8 +383,8 @@ async def process_education(callback: types.CallbackQuery, state: FSMContext, _:
     await state.update_data(education=education)
     
     await callback.message.edit_text(
-        "Сколько кредитов вы успешно закрыли?\n"
-        "(введите 0, если не было кредитов)",
+        _('How many loans have you successfully closed?') + "\n" +
+        _('(enter 0 if you had no loans)'),
         reply_markup=Keyboards.cancel_button(_)
     )
     await state.set_state(PersonalDataStates.entering_closed_loans)
@@ -394,7 +394,7 @@ async def process_education(callback: types.CallbackQuery, state: FSMContext, _:
 @router.message(PersonalDataStates.entering_closed_loans)
 async def process_closed_loans(message: types.Message, state: FSMContext, _: callable):
     """Обработка количества закрытых кредитов"""
-    valid, count, error = validate_positive_number(message.text, "Количество кредитов")
+    valid, count, error = validate_positive_number(message.text, _('Number of loans'))
     
     if not valid:
         await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
@@ -430,7 +430,7 @@ async def process_closed_loans(message: types.Message, state: FSMContext, _: cal
     await state.update_data(closed_loans_count=count)
     
     await message.answer(
-        "В каком регионе вы проживаете?",
+        _('Which region do you live in?'),
         reply_markup=Keyboards.region_choice(_)
     )
     await state.set_state(PersonalDataStates.choosing_region)
@@ -553,7 +553,7 @@ async def process_region(callback: types.CallbackQuery, state: FSMContext, _: ca
             
             # Форматируем сообщение
             message = ScoringCalculator.format_score_message(score, breakdown)
-            message += f"\n\n✅ Данные успешно сохранены!"
+            message += f"\n\n✅ {_('Data saved successfully!')}"
             
             await callback.message.edit_text(
                 message,
@@ -562,7 +562,7 @@ async def process_region(callback: types.CallbackQuery, state: FSMContext, _: ca
             )
     
     await state.clear()
-    await callback.answer("Данные сохранены!")
+    await callback.answer(_('Data saved!'))
 
 
 @router.callback_query(F.data == "edit_personal_data")
@@ -944,7 +944,7 @@ async def start_field_editing(callback: types.CallbackQuery, field_name: str, pe
 @router.message(PersonalDataStates.entering_income)
 async def process_income_edit(message: types.Message, state: FSMContext, _: callable):
     """Обработка редактирования дохода"""
-    valid, amount, error = validate_positive_number(message.text, _("Income"))
+    valid, amount, error = validate_positive_number(message.text, _('Income'))
     
     if not valid:
         await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
@@ -975,7 +975,7 @@ async def process_income_edit(message: types.Message, state: FSMContext, _: call
 @router.message(PersonalDataStates.entering_other_loans_payment)
 async def process_other_loans_payment_edit(message: types.Message, state: FSMContext, _: callable):
     """Обработка редактирования платежей по другим кредитам"""
-    valid, amount, error = validate_positive_number(message.text, _("Payment amount"))
+    valid, amount, error = validate_positive_number(message.text, _('Payment amount'))
     
     if not valid:
         await message.answer(f"❌ {error}", reply_markup=Keyboards.cancel_button(_))
