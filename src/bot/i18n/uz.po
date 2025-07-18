@@ -549,3 +549,280 @@ msgstr "Yuqori qarz yuki! Banklar kredit bera olmaydi."
 # Additional errors
 msgid "Error: data not found"
 msgstr "Xato: ma'lumotlar topilmadi"
+
+# Help section
+msgid "Bot Usage Guide"
+msgstr "Botdan foydalanish bo'yicha qo'llanma"
+
+msgid "Main commands"
+msgstr "Asosiy buyruqlar"
+
+msgid "Start using the bot"
+msgstr "Bot bilan ishlashni boshlash"
+
+msgid "My current application"
+msgstr "Mening joriy arizalarim"
+
+msgid "Referral program"
+msgstr "Referral dasturi"
+
+msgid "This help"
+msgstr "Ushbu yordam"
+
+msgid "How to use the bot"
+msgstr "Botdan qanday foydalanish"
+
+msgid "Creating an application"
+msgstr "Ariza yaratish"
+
+msgid "Choose loan type (car loan or microloan)"
+msgstr "Kredit turini tanlang (avtokredit yoki mikroqarz)"
+
+msgid "Specify amount, rate and term"
+msgstr "Summa, stavka va muddatni ko'rsating"
+
+msgid "Enter your income"
+msgstr "Daromadingizni kiriting"
+
+msgid "DTI calculation"
+msgstr "PDN hisobi"
+
+msgid "DTI is calculated automatically"
+msgstr "PDN avtomatik hisoblanadi"
+
+msgid "excellent indicator"
+msgstr "a'lo ko'rsatkich"
+
+msgid "acceptable indicator"
+msgstr "qoniqarli ko'rsatkich"
+
+msgid "high load"
+msgstr "yuqori yuk"
+
+msgid "Credit score"
+msgstr "Skoring balli"
+
+msgid "Fill in personal data"
+msgstr "Shaxsiy ma'lumotlarni to'ldiring"
+
+msgid "The more data, the higher the score"
+msgstr "Ma'lumotlar qancha ko'p bo'lsa, ball shuncha yuqori"
+
+msgid "Invite friends for bonuses"
+msgstr "Bonuslar uchun do'stlarni taklif qiling"
+
+msgid "Sending to bank"
+msgstr "Bankka yuborish"
+
+msgid "Available when DTI ≤ 50%"
+msgstr "PDN ≤ 50% bo'lganda mavjud"
+
+msgid "Application is sent to all partner banks"
+msgstr "Ariza barcha hamkor banklarga yuboriladi"
+
+msgid "Response will come within 10 minutes"
+msgstr "Javob 10 daqiqa ichida keladi"
+
+msgid "Have questions?"
+msgstr "Savollaringiz bormi?"
+
+msgid "Contact support"
+msgstr "Qo'llab-quvvatlash xizmatiga murojaat qiling"
+
+# Personal data questions
+msgid "Work experience"
+msgstr "Ish tajribasi"
+
+msgid "How many years have you lived at your current address?"
+msgstr "Hozirgi manzilingizda necha yil yashagansiz?"
+
+msgid "Number of years"
+msgstr "Yillar soni"
+
+msgid "Specify your housing status:"
+msgstr "Uy-joy holatingizni ko'rsating:"
+
+msgid "Specify your marital status:"
+msgstr "Oilaviy ahvolingizni ko'rsating:"
+
+msgid "Specify your education level:"
+msgstr "Ta'lim darajangizni ko'rsating:"
+
+msgid "How many loans have you successfully closed?"
+msgstr "Nechta kreditni muvaffaqiyatli yopdingiz?"
+
+msgid "(enter 0 if you had no loans)"
+msgstr "(kreditlar bo'lmasa 0 kiriting)"
+
+msgid "Number of loans"
+msgstr "Kreditlar soni"
+
+msgid "Which region do you live in?"
+msgstr "Qaysi viloyatda yashaysiz?"
+
+msgid "Data saved successfully!"
+msgstr "Ma'lumotlar muvaffaqiyatli saqlandi!"
+
+msgid "Data saved!"
+msgstr "Ma'lumotlar saqlandi!"
+
+msgid "Income"
+msgstr "Daromad"
+
+msgid "Payment amount"
+msgstr "To'lov summasi"
+
+# Regions
+msgid "Andijan"
+msgstr "Andijon"
+
+msgid "Bukhara"
+msgstr "Buxoro"
+
+msgid "Fergana"
+msgstr "Farg'ona"
+
+msgid "Jizzakh"
+msgstr "Jizzax"
+
+msgid "Namangan"
+msgstr "Namangan"
+
+msgid "Navoiy"
+msgstr "Navoiy"
+
+msgid "Qashqadaryo"
+msgstr "Qashqadaryo"
+
+msgid "Samarkand"
+msgstr "Samarqand"
+
+msgid "Sirdaryo"
+msgstr "Sirdaryo"
+
+msgid "Surxondaryo"
+msgstr "Surxondaryo"
+
+msgid "Xorazm"
+msgstr "Xorazm"
+
+msgid "Karakalpakstan"
+msgstr "Qoraqalpog'iston"
+
+# Validation errors
+msgid "Invalid calculation parameters"
+msgstr "Noto'g'ri hisoblash parametrlari"
+
+msgid "Income must be positive"
+msgstr "Daromad musbat bo'lishi kerak"
+
+msgid "Loan amount must be positive"
+msgstr "Kredit summasi musbat bo'lishi kerak"
+
+msgid "Amount exceeds maximum for {loan_type}: {max_amount} sum"
+msgstr "{loan_type} uchun maksimal summadan oshadi: {max_amount} so'm"
+
+msgid "Rate must be between {min_rate}% and {max_rate}%"
+msgstr "Stavka {min_rate}% dan {max_rate}% gacha bo'lishi kerak"
+
+msgid "Term must be from {min_term} to {max_term} months"
+msgstr "Muddat {min_term} dan {max_term} oygacha bo'lishi kerak"
+
+msgid "Cannot use your own referral link"
+msgstr "O'z referral havolangizdan foydalana olmaysiz"
+
+# Scoring criteria
+msgid "Age ≥ 35 years"
+msgstr "Yosh ≥ 35 yil"
+
+msgid "Female gender"
+msgstr "Ayol jinsi"
+
+msgid "Work experience ≥ 24 months"
+msgstr "Ish tajribasi ≥ 24 oy"
+
+msgid "Living at address ≥ 3 years"
+msgstr "Manzilda yashash ≥ 3 yil"
+
+msgid "Own home without mortgage"
+msgstr "Ipotekasiz shaxsiy uy"
+
+msgid "Married"
+msgstr "Uylangan/Turmush qurgan"
+
+msgid "Higher education"
+msgstr "Oliy ma'lumot"
+
+msgid "Closed loans ≥ 3"
+msgstr "Yopilgan kreditlar ≥ 3"
+
+msgid "Has other loans but DTI ≤ 50%"
+msgstr "Boshqa kreditlar bor, lekin PDN ≤ 50%"
+
+msgid "Tashkent or Tashkent region"
+msgstr "Toshkent yoki Toshkent viloyati"
+
+msgid "Apple device"
+msgstr "Apple qurilmasi"
+
+msgid "Referrals ({count} people)"
+msgstr "Referallar ({count} kishi)"
+
+# Score levels
+msgid "Excellent"
+msgstr "A'lo"
+
+msgid "Good"
+msgstr "Yaxshi"
+
+msgid "Average"
+msgstr "O'rtacha"
+
+msgid "Below average"
+msgstr "O'rtachadan past"
+
+msgid "Low"
+msgstr "Past"
+
+msgid "Your credit score: {score}"
+msgstr "Sizning skoring ballingiz: {score}"
+
+msgid "Level: {level}"
+msgstr "Daraja: {level}"
+
+msgid "Breakdown:"
+msgstr "Tafsilotlar:"
+
+# Field names
+msgid "Age"
+msgstr "Yosh"
+
+msgid "Gender"
+msgstr "Jins"
+
+msgid "Address stability"
+msgstr "Manzil barqarorligi"
+
+msgid "Housing status"
+msgstr "Uy-joy holati"
+
+msgid "Marital status"
+msgstr "Oilaviy ahvol"
+
+msgid "Education"
+msgstr "Ta'lim"
+
+msgid "Number of closed loans"
+msgstr "Yopilgan kreditlar soni"
+
+msgid "Region of residence"
+msgstr "Yashash viloyati"
+
+msgid "Monthly income"
+msgstr "Oylik daromad"
+
+msgid "Other loans available"
+msgstr "Boshqa kreditlar mavjudligi"
+
+msgid "Other loan payments"
+msgstr "Boshqa kreditlar bo'yicha to'lovlar"
