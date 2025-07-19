@@ -188,11 +188,11 @@ class Keyboards:
         regions = [
             (f"🏙 {_('Tashkent')}", Region.TASHKENT.value),
             (f"🌆 {_('Tashkent region')}", Region.TASHKENT_REGION.value),
-            ("Андижан", Region.ANDIJAN.value),
-            ("Бухара", Region.BUKHARA.value),
-            ("Фергана", Region.FERGANA.value),
-            ("Джизак", Region.JIZZAKH.value),
-            ("Наманган", Region.NAMANGAN.value),
+            (_('Andijan'), Region.ANDIJAN.value),
+            (_('Bukhara'), Region.BUKHARA.value),
+            (_('Fergana'), Region.FERGANA.value),
+            (_('Jizzakh'), Region.JIZZAKH.value),
+            (_('Namangan'), Region.NAMANGAN.value),
         ]
         
         keyboard = []
@@ -207,13 +207,13 @@ class Keyboards:
     def region_choice_more(_: Callable[[str], str]) -> InlineKeyboardMarkup:
         """Выбор региона (вторая часть)"""
         regions = [
-            ("Навои", Region.NAVOIY.value),
-            ("Кашкадарья", Region.QASHQADARYO.value),
-            ("Самарканд", Region.SAMARKAND.value),
-            ("Сырдарья", Region.SIRDARYO.value),
-            ("Сурхандарья", Region.SURXONDARYO.value),
-            ("Хорезм", Region.XORAZM.value),
-            ("Каракалпакстан", Region.KARAKALPAKSTAN.value),
+            (_('Navoiy'), Region.NAVOIY.value),
+            (_('Qashqadaryo'), Region.QASHQADARYO.value),
+            (_('Samarkand'), Region.SAMARKAND.value),
+            (_('Sirdaryo'), Region.SIRDARYO.value),
+            (_('Surxondaryo'), Region.SURXONDARYO.value),
+            (_('Xorazm'), Region.XORAZM.value),
+            (_('Karakalpakstan'), Region.KARAKALPAKSTAN.value),
         ]
         
         keyboard = []

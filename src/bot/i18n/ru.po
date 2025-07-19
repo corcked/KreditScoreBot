@@ -549,3 +549,310 @@ msgstr "Высокая долговая нагрузка! Банки не смо
 # Additional errors
 msgid "Error: data not found"
 msgstr "Ошибка: данные не найдены"
+
+# Help section
+msgid "Bot Usage Guide"
+msgstr "Справка по использованию бота"
+
+msgid "Main commands"
+msgstr "Основные команды"
+
+msgid "Start using the bot"
+msgstr "Начать работу с ботом"
+
+msgid "My current application"
+msgstr "Моя текущая заявка"
+
+msgid "Referral program"
+msgstr "Реферальная программа"
+
+msgid "This help"
+msgstr "Эта справка"
+
+msgid "How to use the bot"
+msgstr "Как пользоваться ботом"
+
+msgid "Creating an application"
+msgstr "Создание заявки"
+
+msgid "Choose loan type (car loan or microloan)"
+msgstr "Выберите тип кредита (автокредит или микрозайм)"
+
+msgid "Specify amount, rate and term"
+msgstr "Укажите сумму, ставку и срок"
+
+msgid "Enter your income"
+msgstr "Введите ваш доход"
+
+msgid "DTI calculation"
+msgstr "Расчет ПДН"
+
+msgid "DTI is calculated automatically"
+msgstr "ПДН рассчитывается автоматически"
+
+msgid "excellent indicator"
+msgstr "отличный показатель"
+
+msgid "acceptable indicator"
+msgstr "приемлемый показатель"
+
+msgid "high load"
+msgstr "высокая нагрузка"
+
+msgid "Credit score"
+msgstr "Скоринг-балл"
+
+msgid "Fill in personal data"
+msgstr "Заполните персональные данные"
+
+msgid "The more data, the higher the score"
+msgstr "Чем больше данных, тем выше балл"
+
+msgid "Invite friends for bonuses"
+msgstr "Приглашайте друзей для бонусов"
+
+msgid "Sending to bank"
+msgstr "Отправка в банк"
+
+msgid "Available when DTI ≤ 50%"
+msgstr "Доступна при ПДН ≤ 50%"
+
+msgid "Application is sent to all partner banks"
+msgstr "Заявка отправляется во все банки-партнеры"
+
+msgid "Response will come within 10 minutes"
+msgstr "Ответ придет в течение 10 минут"
+
+msgid "Have questions?"
+msgstr "Есть вопросы?"
+
+msgid "Contact support"
+msgstr "Обратитесь в поддержку"
+
+# Personal data questions
+msgid "Work experience"
+msgstr "Стаж работы"
+
+msgid "How many years have you lived at your current address?"
+msgstr "Сколько лет вы проживаете по текущему адресу?"
+
+msgid "Number of years"
+msgstr "Количество лет"
+
+msgid "Specify your housing status:"
+msgstr "Укажите ваш статус жилья:"
+
+msgid "Specify your marital status:"
+msgstr "Укажите ваше семейное положение:"
+
+msgid "Specify your education level:"
+msgstr "Укажите ваш уровень образования:"
+
+msgid "How many loans have you successfully closed?"
+msgstr "Сколько кредитов вы успешно закрыли?"
+
+msgid "(enter 0 if you had no loans)"
+msgstr "(введите 0, если не было кредитов)"
+
+msgid "Number of loans"
+msgstr "Количество кредитов"
+
+msgid "Which region do you live in?"
+msgstr "В каком регионе вы проживаете?"
+
+msgid "Data saved successfully!"
+msgstr "Данные успешно сохранены!"
+
+msgid "Data saved!"
+msgstr "Данные сохранены!"
+
+msgid "Income"
+msgstr "Доход"
+
+msgid "Payment amount"
+msgstr "Сумма платежа"
+
+# Regions
+msgid "Andijan"
+msgstr "Андижан"
+
+msgid "Bukhara"
+msgstr "Бухара"
+
+msgid "Fergana"
+msgstr "Фергана"
+
+msgid "Jizzakh"
+msgstr "Джизак"
+
+msgid "Namangan"
+msgstr "Наманган"
+
+msgid "Navoiy"
+msgstr "Навои"
+
+msgid "Qashqadaryo"
+msgstr "Кашкадарья"
+
+msgid "Samarkand"
+msgstr "Самарканд"
+
+msgid "Sirdaryo"
+msgstr "Сырдарья"
+
+msgid "Surxondaryo"
+msgstr "Сурхандарья"
+
+msgid "Xorazm"
+msgstr "Хорезм"
+
+msgid "Karakalpakstan"
+msgstr "Каракалпакстан"
+
+# Validation errors
+msgid "Invalid calculation parameters"
+msgstr "Некорректные параметры для расчета"
+
+msgid "Income must be positive"
+msgstr "Доход должен быть положительным"
+
+msgid "Loan amount must be positive"
+msgstr "Сумма кредита должна быть положительной"
+
+msgid "Amount exceeds maximum for {loan_type}: {max_amount} sum"
+msgstr "Сумма превышает максимальную для {loan_type}: {max_amount} сум"
+
+msgid "Rate must be between {min_rate}% and {max_rate}%"
+msgstr "Ставка должна быть от {min_rate}% до {max_rate}%"
+
+msgid "Term must be from {min_term} to {max_term} months"
+msgstr "Срок должен быть от {min_term} до {max_term} месяцев"
+
+msgid "Cannot use your own referral link"
+msgstr "Нельзя использовать собственную реферальную ссылку"
+
+# Scoring criteria
+msgid "Age ≥ 35 years"
+msgstr "Возраст ≥ 35 лет"
+
+msgid "Female gender"
+msgstr "Женский пол"
+
+msgid "Work experience ≥ 24 months"
+msgstr "Стаж работы ≥ 24 месяцев"
+
+msgid "Living at address ≥ 3 years"
+msgstr "Проживание по адресу ≥ 3 лет"
+
+msgid "Own home without mortgage"
+msgstr "Собственное жилье без ипотеки"
+
+msgid "Married"
+msgstr "Женат/замужем"
+
+msgid "Higher education"
+msgstr "Высшее образование"
+
+msgid "Closed loans ≥ 3"
+msgstr "Закрытых займов ≥ 3"
+
+msgid "Has other loans but DTI ≤ 50%"
+msgstr "Есть другие кредиты, но ПДН ≤ 50%"
+
+msgid "Tashkent or Tashkent region"
+msgstr "Ташкент или Ташкентская область"
+
+msgid "Apple device"
+msgstr "Устройство Apple"
+
+msgid "Referrals ({count} people)"
+msgstr "Рефералы ({count} чел.)"
+
+# Score levels
+msgid "Excellent"
+msgstr "Отличный"
+
+msgid "Good"
+msgstr "Хороший"
+
+msgid "Average"
+msgstr "Средний"
+
+msgid "Below average"
+msgstr "Ниже среднего"
+
+msgid "Low"
+msgstr "Низкий"
+
+msgid "Your credit score: {score}"
+msgstr "Ваш скоринг-балл: {score}"
+
+msgid "Level: {level}"
+msgstr "Уровень: {level}"
+
+msgid "Breakdown:"
+msgstr "Детализация:"
+
+# Field names
+msgid "Age"
+msgstr "Возраст"
+
+msgid "Gender"
+msgstr "Пол"
+
+msgid "Address stability"
+msgstr "Стабильность адреса"
+
+msgid "Housing status"
+msgstr "Статус жилья"
+
+msgid "Marital status"
+msgstr "Семейное положение"
+
+msgid "Education"
+msgstr "Образование"
+
+msgid "Number of closed loans"
+msgstr "Количество закрытых займов"
+
+msgid "Region of residence"
+msgstr "Регион проживания"
+
+msgid "Monthly income"
+msgstr "Ежемесячный доход"
+
+msgid "Other loans available"
+msgstr "Наличие других кредитов"
+
+msgid "Other loan payments"
+msgstr "Платежи по другим кредитам"
+
+# Rate limiter
+msgid "commands"
+msgstr "команд"
+
+msgid "messages"
+msgstr "сообщений"
+
+msgid "Rate limit exceeded for {limit_type} per minute.\nPlease wait a moment before the next request."
+msgstr "Превышен лимит {limit_type} в минуту.\nПожалуйста, подождите немного перед следующим запросом."
+
+# Field protection explanation
+msgid "This field is protected because it's already filled and affects your credit score. This ensures the reliability of your assessment."
+msgstr "Это поле защищено, так как оно уже заполнено и влияет на ваш кредитный рейтинг. Это обеспечивает надежность вашей оценки."
+
+msgid "This field is protected."
+msgstr "Это поле защищено."
+
+# PDN descriptions
+msgid "DTI"
+msgstr "ПДН"
+
+msgid "Excellent indicator! Banks will readily approve the loan."
+msgstr "Отличный показатель! Банки охотно одобрят кредит."
+
+msgid "Acceptable indicator. Loan approval is possible."
+msgstr "Приемлемый показатель. Одобрение кредита возможно."
+
+msgid "High debt burden! Banks won't be able to issue a loan."
+msgstr "Высокая долговая нагрузка! Банки не смогут выдать кредит."

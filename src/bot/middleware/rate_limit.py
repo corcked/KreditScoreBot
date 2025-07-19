@@ -7,6 +7,8 @@ from aiogram.types import CallbackQuery, Message, TelegramObject
 from cachetools import TTLCache
 
 from src.config.settings import settings
+from src.bot.i18n import get_user_language
+from src.db.database import get_db_context
 
 
 class RateLimitMiddleware(BaseMiddleware):
@@ -46,11 +48,11 @@ class RateLimitMiddleware(BaseMiddleware):
         async with self.lock:
             if is_command:
                 if not await self._check_limit(user_id, self.command_storage, self.commands_per_minute):
-                    await self._send_limit_message(event, "команд")
+                    await self._send_limit_message(event, user_id, "commands")
                     return
             else:
                 if not await self._check_limit(user_id, self.message_storage, self.messages_per_minute):
-                    await self._send_limit_message(event, "сообщений")
+                    await self._send_limit_message(event, user_id, "messages")
                     return
 
         return await handler(event, data)
@@ -100,11 +102,22 @@ class RateLimitMiddleware(BaseMiddleware):
         
         return True
 
-    async def _send_limit_message(self, event: TelegramObject, limit_type: str) -> None:
+    async def _send_limit_message(self, event: TelegramObject, user_id: int, limit_type: str) -> None:
         """Отправка сообщения о превышении лимита"""
-        message = (
-            f"⚠️ Превышен лимит {limit_type} в минуту.\n"
-            f"Пожалуйста, подождите немного перед следующим запросом."
+        # Get user's language
+        async with get_db_context() as db:
+            lang = await get_user_language(db, user_id)
+            
+        # Import here to avoid circular imports
+        from src.bot.i18n import simple_gettext
+        _ = lambda msg: simple_gettext(lang, msg)
+        
+        # Translate limit type
+        limit_type_translated = _(limit_type)
+        
+        # Create message
+        message = "⚠️ " + _("Rate limit exceeded for {limit_type} per minute.\nPlease wait a moment before the next request.").format(
+            limit_type=limit_type_translated
         )
         
         if isinstance(event, Message):

@@ -1,4 +1,4 @@
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Callable
 from src.db.models import PersonalData
 from src.core.enums import *
 
@@ -8,22 +8,22 @@ class FieldProtectionManager:
     
     # Поля, которые блокируются после заполнения
     PROTECTED_FIELDS = {
-        'age': 'Возраст',
-        'gender': 'Пол',
-        'work_experience_months': 'Стаж работы',
-        'address_stability_years': 'Стабильность адреса',
-        'housing_status': 'Статус жилья',
-        'marital_status': 'Семейное положение',
-        'education': 'Образование',
-        'closed_loans_count': 'Количество закрытых займов',
-        'region': 'Регион проживания',
+        'age': 'Age',
+        'gender': 'Gender',
+        'work_experience_months': 'Work experience',
+        'address_stability_years': 'Address stability',
+        'housing_status': 'Housing status',
+        'marital_status': 'Marital status',
+        'education': 'Education',
+        'closed_loans_count': 'Number of closed loans',
+        'region': 'Region of residence',
     }
     
     # Поля, которые всегда можно редактировать
     ALWAYS_EDITABLE_FIELDS = {
-        'monthly_income': 'Ежемесячный доход',
-        'has_other_loans': 'Наличие других кредитов',
-        'other_loans_monthly_payment': 'Платежи по другим кредитам'
+        'monthly_income': 'Monthly income',
+        'has_other_loans': 'Other loans available',
+        'other_loans_monthly_payment': 'Other loan payments'
     }
     
     @classmethod
@@ -74,9 +74,13 @@ class FieldProtectionManager:
         return editable
     
     @classmethod
-    def get_field_status(cls, personal_data: PersonalData) -> Dict[str, Dict[str, any]]:
+    def get_field_status(cls, personal_data: PersonalData, translate: Optional[Callable[[str], str]] = None) -> Dict[str, Dict[str, any]]:
         """
         Возвращает статус всех полей
+        
+        Args:
+            personal_data: Объект персональных данных
+            translate: Функция перевода (опционально)
         
         Returns:
             Dict с информацией о каждом поле:
@@ -96,10 +100,13 @@ class FieldProtectionManager:
         for field_name, display_name in all_fields.items():
             field_value = getattr(personal_data, field_name, None)
             
+            # Translate display name if translation function is provided
+            localized_name = translate(display_name) if translate else display_name
+            
             status[field_name] = {
                 'is_protected': cls.is_field_protected(personal_data, field_name),
                 'is_filled': field_value is not None,
-                'display_name': display_name,
+                'display_name': localized_name,
                 'current_value': field_value,
                 'is_always_editable': field_name in cls.ALWAYS_EDITABLE_FIELDS
             }

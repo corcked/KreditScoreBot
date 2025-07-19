@@ -1,6 +1,6 @@
 import hashlib
 import secrets
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Callable
 from urllib.parse import urlencode
 
 
@@ -122,20 +122,22 @@ class ReferralSystem:
         return None
 
     @staticmethod
-    def can_use_referral(new_user_id: int, referrer_id: int) -> Tuple[bool, str]:
+    def can_use_referral(new_user_id: int, referrer_id: int, translate: Optional[Callable[[str], str]] = None) -> Tuple[bool, str]:
         """
         Проверка возможности использования реферальной ссылки
         
         Args:
             new_user_id: ID нового пользователя
             referrer_id: ID реферера
+            translate: Функция перевода (опционально)
             
         Returns:
             Кортеж (можно_использовать, причина_отказа)
         """
         # Проверка на самореферал
         if new_user_id == referrer_id:
-            return False, "Нельзя использовать собственную реферальную ссылку"
+            msg = translate('Cannot use your own referral link') if translate else 'Cannot use your own referral link'
+            return False, msg
             
         # В реальном приложении здесь должны быть дополнительные проверки:
         # - Не был ли пользователь уже зарегистрирован
