@@ -224,14 +224,16 @@ async def show_loan_confirmation(message: types.Message, state: FSMContext, _: c
     monthly_payment = PDNCalculator.calculate_annuity_payment(
         data["amount"],
         data["rate"],
-        data["term_months"]
+        data["term_months"],
+        translate=_
     )
     
     # Расчет ПДН
     pdn_value = PDNCalculator.calculate_pdn(
         monthly_payment,
         data["income"],
-        data.get("other_payments", Decimal("0"))
+        data.get("other_payments", Decimal("0")),
+        translate=_
     )
     
     # Сохраняем расчетные данные

@@ -843,3 +843,16 @@ msgstr "Это поле защищено, так как оно уже запол
 
 msgid "This field is protected."
 msgstr "Это поле защищено."
+
+# PDN descriptions
+msgid "DTI"
+msgstr "ПДН"
+
+msgid "Excellent indicator! Banks will readily approve the loan."
+msgstr "Отличный показатель! Банки охотно одобрят кредит."
+
+msgid "Acceptable indicator. Loan approval is possible."
+msgstr "Приемлемый показатель. Одобрение кредита возможно."
+
+msgid "High debt burden! Banks won't be able to issue a loan."
+msgstr "Высокая долговая нагрузка! Банки не смогут выдать кредит."

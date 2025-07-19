@@ -843,3 +843,16 @@ msgstr "Bu maydon himoyalangan, chunki u allaqachon to'ldirilgan va sizning kred
 
 msgid "This field is protected."
 msgstr "Bu maydon himoyalangan."
+
+# PDN descriptions
+msgid "DTI"
+msgstr "PDN"
+
+msgid "Excellent indicator! Banks will readily approve the loan."
+msgstr "A'lo ko'rsatkich! Banklar kreditni bemalol tasdiqlaydi."
+
+msgid "Acceptable indicator. Loan approval is possible."
+msgstr "Qoniqarli ko'rsatkich. Kreditni tasdiqlash mumkin."
+
+msgid "High debt burden! Banks won't be able to issue a loan."
+msgstr "Yuqori qarz yuki! Banklar kredit bera olmaydi."
