@@ -826,3 +826,20 @@ msgstr "Boshqa kreditlar mavjudligi"
 
 msgid "Other loan payments"
 msgstr "Boshqa kreditlar bo'yicha to'lovlar"
+
+# Rate limiter
+msgid "commands"
+msgstr "buyruqlar"
+
+msgid "messages"
+msgstr "xabarlar"
+
+msgid "Rate limit exceeded for {limit_type} per minute.\nPlease wait a moment before the next request."
+msgstr "Bir daqiqada {limit_type} limiti oshib ketdi.\nIltimos, keyingi so'rovdan oldin biroz kuting."
+
+# Field protection explanation
+msgid "This field is protected because it's already filled and affects your credit score. This ensures the reliability of your assessment."
+msgstr "Bu maydon himoyalangan, chunki u allaqachon to'ldirilgan va sizning kredit reytingingizga ta'sir qiladi. Bu sizning baholashingizning ishonchliligini ta'minlaydi."
+
+msgid "This field is protected."
+msgstr "Bu maydon himoyalangan."
